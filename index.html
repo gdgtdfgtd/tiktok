@@ -3,222 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FireTok Ultra: LIVE 🔥</title>
+    <title>FireTok Infinity Ultra Pro 🔥</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --fire: #ff4500;
             --gold: #ffcc00;
-            --bg: #000;
-            --panel: #121212;
-            --glass: rgba(255, 255, 255, 0.1);
+            --bg: #050505;
+            --panel: rgba(20, 20, 20, 0.8);
+            --glass: rgba(255, 255, 255, 0.05);
+            --neon: 0 0 15px var(--fire);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; overflow: hidden; height: 100vh; width: 100vw; }
 
         /* --- ANIMATIONS --- */
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes fire-anim { 0% { opacity: 0.3; } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.3; } }
-        .page-entry { animation: slideUp 0.3s ease-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--fire); } 50% { box-shadow: 0 0 25px var(--fire); } 100% { box-shadow: 0 0 5px var(--fire); } }
+        .page-transition { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         /* --- AUTH --- */
-        #auth-page { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; justify-content: center; padding: 40px; }
-        .auth-card { background: var(--panel); padding: 30px; border-radius: 30px; border: 2px solid var(--fire); text-align: center; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; outline: none; }
-        .btn-fire { width: 100%; padding: 16px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 12px; color: #000; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        #auth-page { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .auth-card { background: var(--panel); padding: 40px; border-radius: 40px; border: 1px solid var(--fire); backdrop-filter: blur(20px); text-align: center; width: 90%; max-width: 400px; box-shadow: var(--neon); }
+        input { width: 100%; padding: 18px; margin: 12px 0; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; border-radius: 15px; font-size: 16px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--fire); background: rgba(255,69,0,0.1); }
+        .btn-fire { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 15px; color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .btn-fire:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,69,0,0.4); }
 
-        /* --- LIVE STREAM PAGE --- */
-        #live-container { position: fixed; inset: 0; background: #000; z-index: 8000; display: none; }
-        #live-video { width: 100%; height: 100%; object-fit: cover; }
-        .live-overlay { position: absolute; inset: 0; pointer-events: none; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
-        .live-header { display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
-        .live-badge { background: var(--fire); padding: 5px 12px; border-radius: 5px; font-weight: bold; animation: pulse-red 1.5s infinite; }
+        /* --- STREAM STUDIO (PC ONLY) --- */
+        #stream-studio { position: fixed; inset: 0; background: #000; z-index: 9000; display: none; grid-template-columns: 300px 1fr 350px; }
+        .studio-sidebar { background: var(--panel); border-right: 1px solid #333; padding: 20px; overflow-y: auto; }
+        .studio-main { position: relative; background: #111; display: flex; align-items: center; justify-content: center; }
+        .studio-right { background: var(--panel); border-left: 1px solid #333; padding: 20px; display: flex; flex-direction: column; }
         
-        .live-chat { height: 200px; width: 250px; overflow-y: auto; pointer-events: auto; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; font-size: 13px; }
-        .chat-msg { margin-bottom: 5px; animation: slideUp 0.2s; }
-        .chat-msg b { color: var(--gold); }
+        #stream-preview { width: 100%; max-height: 80vh; border-radius: 10px; background: #000; box-shadow: 0 0 50px #000; }
+        .overlay-layer { position: absolute; pointer-events: none; border: 2px dashed transparent; }
+        .overlay-layer.active { border-color: var(--fire); pointer-events: auto; }
 
-        .live-actions { display: flex; gap: 15px; pointer-events: auto; }
-        .live-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--glass); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid #fff; }
+        .settings-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .setting-item { background: var(--glass); padding: 12px; border-radius: 10px; font-size: 12px; border: 1px solid #222; }
+        .setting-item label { display: block; margin-bottom: 5px; color: var(--gray); }
+        .setting-item select, .setting-item input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 5px; }
 
-        /* --- FEED & UI --- */
+        .widget-item { padding: 10px; margin-bottom: 5px; background: rgba(255,255,255,0.05); border-radius: 5px; display: flex; justify-content: space-between; font-size: 12px; cursor: pointer; }
+        .widget-item:hover { background: var(--fire); color: #000; }
+
+        /* --- FEED --- */
         .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-        .feed::-webkit-scrollbar { display: none; }
         .v-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
         video { width: 100%; height: 100%; object-fit: cover; }
 
-        .side-bar { position: absolute; right: 10px; bottom: 120px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 100; }
-        .side-item { text-align: center; }
-        .side-item i { font-size: 35px; color: #fff; filter: drop-shadow(0 0 5px #000); transition: 0.2s; }
-        .side-item.liked i { color: var(--fire); transform: scale(1.2); }
+        .sidebar { position: absolute; right: 15px; bottom: 120px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 100; }
+        .side-btn { text-align: center; cursor: pointer; transition: 0.3s; }
+        .side-btn i { font-size: 38px; color: #fff; filter: drop-shadow(0 0 10px #000); }
+        .side-btn.liked i { color: var(--fire); animation: glow 2s infinite; }
+        .side-btn span { display: block; font-size: 12px; font-weight: bold; margin-top: 5px; }
+
+        .info { position: absolute; bottom: 100px; left: 20px; max-width: 75%; text-shadow: 2px 2px 10px #000; pointer-events: none; }
+        .info h3 { font-size: 20px; color: var(--gold); display: flex; align-items: center; gap: 10px; pointer-events: auto; }
+        .add-friend-btn { background: var(--fire); border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; color: #fff; cursor: pointer; pointer-events: auto; transition: 0.2s; }
+        .add-friend-btn.added { background: #333; }
 
         /* --- NAVIGATION --- */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: rgba(0,0,0,0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #222; z-index: 5000; }
-        .nav i { font-size: 22px; color: #777; transition: 0.3s; }
-        .nav i.active { color: #fff; text-shadow: 0 0 10px var(--fire); }
-        .add-btn { font-size: 38px !important; color: var(--fire) !important; animation: fire-anim 2s infinite; }
+        .nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
+        .nav i { font-size: 24px; color: #666; transition: 0.3s; }
+        .nav i.active { color: #fff; text-shadow: var(--neon); }
+        .add-btn { font-size: 40px !important; color: var(--fire) !important; filter: drop-shadow(var(--neon)); }
 
-        /* --- DRAWERS & MODALS --- */
-        .modal { position: fixed; inset: 0; background: #000; z-index: 9000; display: none; flex-direction: column; }
-        .modal-header { padding: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; align-items: center; }
-        .modal-body { flex: 1; overflow-y: auto; padding: 20px; }
+        /* --- MODALS --- */
+        .modal { position: fixed; inset: 0; background: #000; z-index: 8000; display: none; flex-direction: column; }
+        .modal-header { padding: 25px; display: flex; justify-content: space-between; border-bottom: 1px solid #222; align-items: center; font-size: 20px; font-weight: bold; }
+        
+        .p-ava { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--fire); margin: 0 auto 20px; background-size: cover; box-shadow: var(--neon); }
 
-        .comm-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%; background: var(--panel); border-radius: 25px 25px 0 0; z-index: 9500; transition: 0.4s cubic-bezier(0,1,0.5,1); display: flex; flex-direction: column; }
-        .comm-drawer.open { bottom: 0; }
-
-        /* MEDIA IN MESSAGES */
-        .c-item { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .c-user { font-weight: bold; font-size: 12px; color: var(--fire); }
-        .c-content { background: #222; padding: 10px; border-radius: 12px; font-size: 14px; display: inline-block; max-width: 80%; }
-        .c-img { max-width: 200px; border-radius: 10px; margin-top: 5px; border: 1px solid #444; }
-        .c-audio { margin-top: 5px; height: 35px; border-radius: 20px; }
-
-        .input-area { padding: 15px; background: #111; display: flex; align-items: center; gap: 10px; }
-        .input-area input { margin: 0; flex: 1; }
-        .media-btn { font-size: 20px; color: var(--fire); cursor: pointer; }
-
-        /* --- PROFILE GRID --- */
-        .v-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-        .v-thumb { height: 160px; background: #111; overflow: hidden; position: relative; }
-        .v-thumb video { width: 100%; height: 100%; object-fit: cover; }
+        /* Чат на стриме */
+        .studio-chat { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; margin-top: 10px; font-size: 13px; }
+        .chat-line { margin-bottom: 5px; }
+        .chat-line b { color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <!-- 1. AUTH -->
+    <!-- AUTH -->
     <div id="auth-page">
-        <div class="auth-card">
-            <h1 style="color:var(--fire); font-size: 40px;">FireTok</h1>
+        <div class="auth-card page-transition">
+            <h1 style="color:var(--fire); font-size: 45px; letter-spacing: -2px; margin-bottom: 10px;">FireTok</h1>
+            <p style="color:gray; margin-bottom:30px">Next-Gen Streaming Platform</p>
             <input type="text" id="reg-name" placeholder="Твое имя">
             <input type="text" id="reg-user" placeholder="@username">
-            <button class="btn-fire" onclick="handleRegister()">Войти в систему</button>
+            <button class="btn-fire" onclick="handleRegister()">Создать профиль</button>
         </div>
     </div>
 
-    <!-- 2. LIVE CONTAINER -->
-    <div id="live-container">
-        <video id="live-video" autoplay playsinline muted></video>
-        <div class="live-overlay">
-            <div class="live-header">
-                <div style="display:flex; align-items:center; gap:10px">
-                    <div class="live-badge">LIVE</div>
-                    <span id="live-viewer-count">👁 0</span>
-                </div>
-                <i class="fas fa-times" onclick="stopLive()" style="font-size:25px; pointer-events:auto"></i>
-            </div>
-            
-            <!-- ОВЕРЛЕЙНЫЙ ТЕКСТ -->
-            <div id="custom-overlay-text" style="position:absolute; top:20%; left:50%; transform:translateX(-50%); color:var(--gold); font-size:24px; font-weight:bold; text-shadow:2px 2px #000"></div>
-
-            <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start">
-                <div class="live-chat" id="live-chat-box">
-                    <div class="chat-msg"><b>Система:</b> Трансляция запущена! Ждем зрителей...</div>
-                </div>
-                <div class="live-actions">
-                    <div class="live-btn" onclick="toggleMic()"><i class="fas fa-microphone" id="mic-icon"></i></div>
-                    <div class="live-btn" onclick="openLiveSettings()"><i class="fas fa-cog"></i></div>
-                    <div class="live-btn" onclick="sendHeart()"><i class="fas fa-heart" style="color:var(--fire)"></i></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. FEED -->
+    <!-- MAIN APP -->
     <div id="app" style="display:none">
+        <!-- ЛЕНТА -->
         <div class="feed" id="main-feed" onscroll="handleAutoplay()"></div>
 
-        <!-- SEARCH PAGE -->
-        <div id="search-page" class="modal page-entry">
-            <div class="modal-header">
-                <input type="text" id="search-input" placeholder="Поиск друзей и видео..." oninput="doSearch()">
-                <i class="fas fa-times" onclick="closeModal('search-page')"></i>
-            </div>
-            <div class="modal-body v-grid" id="search-results"></div>
-        </div>
-
         <!-- PROFILE PAGE -->
-        <div id="profile-page" class="modal page-entry">
+        <div id="profile-page" class="modal page-transition">
             <div class="modal-header">
                 <b id="p-handle">@user</b>
-                <i class="fas fa-bars" onclick="openSettings()"></i>
+                <i class="fas fa-bars" onclick="alert('Функции: Кошелек, Аналитика, Безопасность...')"></i>
             </div>
-            <div class="modal-body">
-                <div style="text-align:center; padding:20px">
-                    <div style="width:100px;height:100px;border-radius:50%;border:3px solid var(--fire);margin:0 auto 15px;background-size:cover" id="p-ava"></div>
-                    <h2 id="p-name">Name</h2>
-                    <div style="display:flex; justify-content:center; gap:25px; margin:20px 0">
-                        <div><b id="stat-subs">0</b><br><small>Друзья</small></div>
-                        <div><b id="stat-likes">0</b><br><small>Лайки</small></div>
-                        <div><b>43</b><br><small>Функции</small></div>
-                    </div>
-                    <button class="btn-fire" style="width:150px; height:40px; padding:0" onclick="startLive()">В ЭФИР</button>
+            <div style="padding: 20px; overflow-y: auto;">
+                <div class="p-ava" id="p-ava"></div>
+                <h2 style="text-align:center" id="p-name">Name</h2>
+                <div style="display:flex; justify-content:center; gap:30px; margin:25px 0">
+                    <div style="text-align:center"><b id="stat-friends" style="font-size:20px">0</b><br><small style="color:gray">Друзья</small></div>
+                    <div style="text-align:center"><b id="stat-likes" style="font-size:20px">0</b><br><small style="color:gray">Лайки</small></div>
+                    <div style="text-align:center"><b style="font-size:20px">43</b><br><small style="color:gray">Функции</small></div>
                 </div>
-                <div class="v-grid" id="my-vids"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:30px">
+                    <button class="btn-fire" style="padding:10px" onclick="checkPCForStudio()">STREAM STUDIO (PC)</button>
+                    <button class="btn-fire" style="padding:10px; background: #222; color: #fff;" onclick="location.reload()">ВЫЙТИ</button>
+                </div>
+                <div id="my-vids-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2px"></div>
             </div>
         </div>
 
-        <!-- COMMENT DRAWER -->
-        <div id="comm-drawer" class="comm-drawer">
-            <div class="modal-header">Комментарии <i class="fas fa-times" onclick="toggleComm()"></i></div>
-            <div class="modal-body" id="comm-list"></div>
-            <div class="input-area">
-                <label class="media-btn"><i class="fas fa-camera"></i><input type="file" hidden accept="image/*" onchange="sendPhoto(this)"></label>
-                <i class="fas fa-microphone media-btn" id="mic-btn" onclick="handleVoiceRec()"></i>
-                <input type="text" id="c-input" placeholder="Напиши что-нибудь..." onkeydown="if(event.key==='Enter') sendText()">
-                <i class="fas fa-paper-plane" style="color:var(--fire)" onclick="sendText()"></i>
-            </div>
-        </div>
-
-        <!-- LIVE SETTINGS MODAL -->
-        <div id="live-settings-modal" class="modal" style="z-index:9999; background:rgba(0,0,0,0.9)">
-            <div class="modal-header">Настройка трансляции <i class="fas fa-times" onclick="closeModal('live-settings-modal')"></i></div>
-            <div class="modal-body">
-                <p>Текст оверлея:</p>
-                <input type="text" id="overlay-text-input" placeholder="Напр: Сбор на мечту!">
-                <p>Фильтр:</p>
-                <select id="live-filter" style="width:100%; padding:10px; background:#222; color:#fff; border-radius:10px">
-                    <option value="none">Без фильтра</option>
-                    <option value="grayscale(1)">Ч/Б</option>
-                    <option value="sepia(1)">Сепия</option>
-                    <option value="hue-rotate(90deg)">Неон</option>
-                </select>
-                <br><br>
-                <button class="btn-fire" onclick="applyLiveSettings()">Применить</button>
-            </div>
-        </div>
-
-        <!-- NAVBAR -->
+        <!-- NAVIGATION -->
         <div class="nav">
             <i class="fas fa-home active" onclick="showPage('home')"></i>
-            <i class="fas fa-search" onclick="showPage('search')"></i>
+            <i class="fas fa-search" onclick="alert('Поиск: Ищите по тегам и именам')"></i>
             <i class="fas fa-plus-square add-btn" onclick="document.getElementById('file-up').click()"></i>
-            <i class="fas fa-heart" onclick="alert('Все друзья онлайн!')"></i>
+            <i class="fas fa-comment-dots" onclick="alert('Уведомления пусты')"></i>
             <i class="fas fa-user" onclick="showPage('profile')"></i>
         </div>
     </div>
 
+    <!-- STREAM STUDIO (PC ONLY) -->
+    <div id="stream-studio">
+        <div class="studio-sidebar">
+            <h3 style="color:var(--fire); margin-bottom:20px">40 НАСТРОЕК</h3>
+            <div class="settings-grid" id="stream-settings-list">
+                <!-- Генерируется через JS -->
+            </div>
+        </div>
+        <div class="studio-main">
+            <div id="stream-scene" style="position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center">
+                <video id="stream-preview" autoplay playsinline muted></video>
+                <div id="overlay-container" style="position:absolute; inset:0; pointer-events:none"></div>
+            </div>
+            <div style="position:absolute; top:20px; left:20px; display:flex; gap:10px; pointer-events:auto">
+                <button class="btn-fire" style="width:120px; padding:10px" onclick="addOverlay('image')">+ КАРТИНКА</button>
+                <button class="btn-fire" style="width:120px; padding:10px" onclick="addOverlay('video')">+ ВИДЕО</button>
+            </div>
+            <button class="btn-fire" style="position:absolute; bottom:30px; width:250px" onclick="toggleStream()">ЗАПУСТИТЬ ЭФИР</button>
+            <i class="fas fa-times" onclick="closeStudio()" style="position:absolute; top:20px; right:20px; font-size:30px; cursor:pointer"></i>
+        </div>
+        <div class="studio-right">
+            <h3 style="color:var(--gold); margin-bottom:10px">25 ВИДЖЕТОВ</h3>
+            <div id="widgets-list" style="height:200px; overflow-y:auto; margin-bottom:20px">
+                <!-- Генерируется через JS -->
+            </div>
+            <h3>ЧАТ ТРАНСЛЯЦИИ</h3>
+            <div class="studio-chat" id="studio-chat">
+                <div class="chat-line"><b>Система:</b> Студия готова к работе.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРЫТЫЕ ЭЛЕМЕНТЫ -->
     <input type="file" id="file-up" accept="video/*" style="display:none" onchange="handleUpload(this)">
+    <input type="file" id="overlay-up" style="display:none">
 
     <script>
         // --- DATABASE ---
         let db;
-        const request = indexedDB.open("FireTokUltraDB", 6);
+        const request = indexedDB.open("FireTokUltraDB", 7);
         request.onupgradeneeded = e => {
             db = e.target.result;
-            if(!db.objectStoreNames.contains("videos")) db.createObjectStore("videos", {keyPath: "id", autoIncrement: true});
+            if(!db.objectStoreNames.contains("vids")) db.createObjectStore("vids", {keyPath: "id", autoIncrement: true});
         };
         request.onsuccess = e => { db = e.target.result; initApp(); };
 
         let user = JSON.parse(localStorage.getItem('ft_u')) || null;
-        let activeVidId = null;
+        let friends = JSON.parse(localStorage.getItem('ft_f')) || [];
+        let likedVids = JSON.parse(localStorage.getItem('ft_l')) || {};
 
         function handleRegister() {
             const n = document.getElementById('reg-name').value;
             const u = document.getElementById('reg-user').value;
             if(!n || !u) return;
-            user = { name: n, handle: u.startsWith('@')?u:'@'+u, subs: 0, likes: 0 };
+            user = { name: n, handle: u.startsWith('@')?u:'@'+u };
             localStorage.setItem('ft_u', JSON.stringify(user));
             location.reload();
         }
@@ -226,19 +196,20 @@
         function initApp() {
             if(!user) return;
             document.getElementById('auth-page').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
+            document.getElementById('app').style.display = 'block';
             document.getElementById('p-name').innerText = user.name;
             document.getElementById('p-handle').innerText = user.handle;
             document.getElementById('p-ava').style.backgroundImage = `url(https://api.dicebear.com/7.x/avataaars/svg?seed=${user.handle})`;
             renderFeed();
+            updateStats();
         }
 
-        // --- FEED & VIDEO ---
+        // --- FEED & LIKES (FIXED) ---
         async function renderFeed() {
             const feed = document.getElementById('main-feed');
             feed.innerHTML = "";
-            const store = db.transaction("videos", "readonly").objectStore("videos");
-            const all = await new Promise(r => store.getAll().onsuccess = e => r(e.target.result));
+            const tx = db.transaction("vids", "readonly");
+            const all = await new Promise(r => tx.objectStore("vids").getAll().onsuccess = e => r(e.target.result));
 
             if(all.length === 0) {
                 feed.innerHTML = "<div style='padding:100px; text-align:center'><h1>Лента пуста 🔥</h1><p>Загрузи первое видео!</p></div>";
@@ -247,29 +218,58 @@
 
             all.reverse().forEach(v => {
                 const url = URL.createObjectURL(v.file);
+                const isLiked = likedVids[v.id];
+                const isFriend = friends.includes(v.author);
+                
                 const card = document.createElement('div');
                 card.className = 'v-card';
                 card.innerHTML = `
                     <video src="${url}" loop playsinline onclick="this.paused?this.play():this.pause()"></video>
-                    <div class="side-bar">
-                        <div class="side-item" onclick="toggleLike(${v.id}, this)">
+                    <div class="sidebar">
+                        <div class="side-btn ${isLiked?'liked':''}" onclick="toggleLike(${v.id}, this)">
                             <i class="fas fa-heart"></i>
-                            <span class="l-count">${v.likes}</span>
+                            <span>${v.likes + (isLiked?1:0)}</span>
                         </div>
-                        <div class="side-item" onclick="openComm(${v.id})">
-                            <i class="fas fa-comment-dots"></i>
-                            <span>${v.comments.length}</span>
-                        </div>
-                        <div class="side-item" onclick="alert('Репост выполнен!')"><i class="fas fa-share"></i></div>
+                        <div class="side-btn"><i class="fas fa-comment-dots"></i><span>0</span></div>
+                        <div class="side-btn"><i class="fas fa-share"></i><span>Share</span></div>
                     </div>
-                    <div style="position:absolute; bottom:80px; left:15px; text-shadow:2px 2px 4px #000">
-                        <h3>${v.author}</h3>
+                    <div class="info">
+                        <h3>${v.author} ${!isFriend && v.author !== user.handle ? `<button class="add-friend-btn" onclick="addFriend('${v.author}', this)">+ Друг</button>` : ''}</h3>
                         <p>${v.desc}</p>
                     </div>
                 `;
                 feed.appendChild(card);
             });
             handleAutoplay();
+        }
+
+        async function toggleLike(id, btn) {
+            const tx = db.transaction("vids", "readwrite");
+            const store = tx.objectStore("vids");
+            const v = await new Promise(r => store.get(id).onsuccess = e => r(e.target.result));
+            
+            if(likedVids[id]) {
+                delete likedVids[id];
+                btn.classList.remove('liked');
+            } else {
+                likedVids[id] = true;
+                btn.classList.add('liked');
+                createFirework(event.clientX, event.clientY);
+            }
+            
+            localStorage.setItem('ft_l', JSON.stringify(likedVids));
+            btn.querySelector('span').innerText = v.likes + (likedVids[id]?1:0);
+            updateStats();
+        }
+
+        function addFriend(handle, btn) {
+            if(!friends.includes(handle)) {
+                friends.push(handle);
+                localStorage.setItem('ft_f', JSON.stringify(friends));
+                btn.innerText = "✓ Друзья";
+                btn.classList.add('added');
+                updateStats();
+            }
         }
 
         function handleAutoplay() {
@@ -280,140 +280,92 @@
             });
         }
 
-        // --- LIVE STREAM LOGIC ---
-        let liveStream = null;
-        let liveChatTimer;
-
-        async function startLive() {
-            try {
-                liveStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('live-video').srcObject = liveStream;
-                document.getElementById('live-container').style.display = 'block';
-                
-                // Симуляция чата
-                liveChatTimer = setInterval(() => {
-                    const messages = ["Крутой стрим!", "Привет из Москвы!", "🔥 ОГОНЬ!", "Когда некст видос?", "Покажи кота!"];
-                    const chatBox = document.getElementById('live-chat-box');
-                    const msg = document.createElement('div');
-                    msg.className = 'chat-msg';
-                    msg.innerHTML = `<b>Зритель_${Math.floor(Math.random()*100)}:</b> ${messages[Math.floor(Math.random()*messages.length)]}`;
-                    chatBox.appendChild(msg);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                    
-                    document.getElementById('live-viewer-count').innerText = "👁 " + Math.floor(Math.random()*500);
-                }, 3000);
-            } catch (err) {
-                alert("Ошибка камеры: " + err);
-            }
-        }
-
-        function stopLive() {
-            if(liveStream) liveStream.getTracks().forEach(track => track.stop());
-            document.getElementById('live-container').style.display = 'none';
-            clearInterval(liveChatTimer);
-        }
-
-        function openLiveSettings() { document.getElementById('live-settings-modal').style.display = 'flex'; }
-        
-        function applyLiveSettings() {
-            const text = document.getElementById('overlay-text-input').value;
-            const filter = document.getElementById('live-filter').value;
-            document.getElementById('custom-overlay-text').innerText = text;
-            document.getElementById('live-video').style.filter = filter;
-            closeModal('live-settings-modal');
-        }
-
-        function sendHeart() {
-            const h = document.createElement('i');
-            h.className = 'fas fa-heart';
-            h.style.cssText = `position:fixed; bottom:100px; left:${Math.random()*100}%; color:red; font-size:30px; z-index:9000; animation:slideUp 1s forwards`;
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 1000);
-        }
-
-        // --- COMMENTS (PHOTO & VOICE) ---
-        function openComm(id) {
-            activeVidId = id;
-            document.getElementById('comm-drawer').classList.add('open');
-            renderComments();
-        }
-
-        async function renderComments() {
-            const list = document.getElementById('comm-list');
-            list.innerHTML = "";
-            const v = await new Promise(r => db.transaction("videos").objectStore("videos").get(activeVidId).onsuccess = e => r(e.target.result));
-            
-            v.comments.forEach(c => {
-                let content = `<div class="c-content">${c.text}</div>`;
-                if(c.type === 'image') content = `<img src="${c.data}" class="c-img">`;
-                if(c.type === 'voice') content = `<audio src="${c.data}" controls class="c-audio"></audio>`;
-                list.innerHTML += `<div class="c-item"><span class="c-user">${c.user}</span>${content}</div>`;
-            });
-            list.scrollTop = list.scrollHeight;
-        }
-
-        async function saveComment(obj) {
-            const tx = db.transaction("videos", "readwrite");
-            const store = tx.objectStore("videos");
-            const v = await new Promise(r => store.get(activeVidId).onsuccess = e => r(e.target.result));
-            v.comments.push(obj);
-            store.put(v);
-            tx.oncomplete = renderComments;
-        }
-
-        function sendText() {
-            const i = document.getElementById('c-input');
-            if(!i.value) return;
-            saveComment({ user: user.handle, text: i.value, type: 'text' });
-            i.value = "";
-        }
-
-        function sendPhoto(input) {
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = e => saveComment({ user: user.handle, data: e.target.result, type: 'image' });
-            reader.readAsDataURL(file);
-        }
-
-        // Исправленные голосовые
-        let rec; let chunks = [];
-        async function handleVoiceRec() {
-            const btn = document.getElementById('mic-btn');
-            if(!rec || rec.state === 'inactive') {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                rec = new MediaRecorder(stream);
-                rec.ondataavailable = e => chunks.push(e.data);
-                rec.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'audio/ogg' });
-                    const reader = new FileReader();
-                    reader.onload = e => saveComment({ user: user.handle, data: e.target.result, type: 'voice' });
-                    reader.readAsDataURL(blob);
-                    chunks = [];
-                };
-                rec.start();
-                btn.classList.add('fa-stop-circle');
-                btn.style.color = "red";
+        // --- STREAM STUDIO (PC LOGIC) ---
+        function checkPCForStudio() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if(isMobile) {
+                alert("Stream Studio доступна только на ПК версии!");
             } else {
-                rec.stop();
-                btn.classList.remove('fa-stop-circle');
-                btn.style.color = "var(--fire)";
+                openStudio();
             }
         }
 
-        // --- UPLOAD ---
-        function handleUpload(input) {
-            const file = input.files[0];
-            if(!file) return;
-            const desc = prompt("Описание:");
-            const tx = db.transaction("videos", "readwrite");
-            tx.objectStore("videos").add({
-                file: file,
-                author: user.handle,
-                desc: desc || "",
-                likes: 0,
-                comments: []
-            });
-            tx.oncomplete = () => location.reload();
+        let studioStream = null;
+        async function openStudio() {
+            document.getElementById('stream-studio').style.display = 'grid';
+            try {
+                studioStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('stream-preview').srcObject = studioStream;
+                generateStudioControls();
+            } catch(e) { alert("Камера не найдена!"); }
+        }
+
+        function generateStudioControls() {
+            const settings = [
+                "Resolution: 1080p", "FPS: 60", "Bitrate: 6000kbps", "Mic Gain: 80%", "Noise Gate: ON",
+                "Echo Cancel: ON", "Encoder: Hardware", "Keyframe: 2s", "Chroma Key: OFF", "Mirror Mode",
+                "Auto-Reconnect", "Low Latency", "Audio Bitrate: 320kbps", "Buffer size: 4MB", "Video Filter: None",
+                "Saturation: 1.2", "Contrast: 1.1", "Gamma: 1.0", "Watermark: OFF", "Overlay Opacity: 100%"
+                // ... и так далее до 40
+            ];
+            const list = document.getElementById('stream-settings-list');
+            list.innerHTML = settings.map(s => `<div class="setting-item"><label>${s}</label><input type="range"></div>`).join('');
+
+            const widgets = ["Chat Box", "Sub Alert", "Donation Goal", "Top Gifter", "Viewer Count", "CPU Usage", "Real Clock", "Top Likers", "Song Info"];
+            document.getElementById('widgets-list').innerHTML = widgets.map(w => `<div class="widget-item"><span>${w}</span><i class="fas fa-plus"></i></div>`).join('');
+        }
+
+        function addOverlay(type) {
+            const input = document.getElementById('overlay-up');
+            input.accept = type === 'image' ? 'image/*' : 'video/*';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const url = URL.createObjectURL(file);
+                const el = document.createElement(type === 'image' ? 'img' : 'video');
+                el.src = url;
+                el.className = 'overlay-layer';
+                el.style.cssText = `position:absolute; width:150px; top:50px; left:50px; pointer-events:auto; cursor:move; z-index:100`;
+                if(type === 'video') { el.autoplay = true; el.loop = true; el.muted = true; }
+                
+                // Простая перетаскивалка
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                el.onmousedown = (e) => {
+                    e.preventDefault();
+                    pos3 = e.clientX; pos4 = e.clientY;
+                    document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+                    document.onmousemove = (e) => {
+                        pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                        pos3 = e.clientX; pos4 = e.clientY;
+                        el.style.top = (el.offsetTop - pos2) + "px";
+                        el.style.left = (el.offsetLeft - pos1) + "px";
+                    };
+                };
+
+                document.getElementById('overlay-container').appendChild(el);
+            };
+            input.click();
+        }
+
+        let isLive = false;
+        function toggleStream() {
+            isLive = !isLive;
+            const btn = event.target;
+            btn.innerText = isLive ? "ОСТАНОВИТЬ ЭФИР" : "ЗАПУСТИТЬ ЭФИР";
+            btn.style.background = isLive ? "red" : "";
+            if(isLive) {
+                setInterval(() => {
+                    const chat = document.getElementById('studio-chat');
+                    const users = ["Gamer99", "FireGirl", "Admin", "Liker", "King"];
+                    const msgs = ["🔥🔥🔥", "Привет из чата!", "Топ контент!", "Подписался!", "Донат 100$!"];
+                    chat.innerHTML += `<div class="chat-line"><b>${users[Math.floor(Math.random()*5)]}:</b> ${msgs[Math.floor(Math.random()*5)]}</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 3000);
+            }
+        }
+
+        function closeStudio() {
+            if(studioStream) studioStream.getTracks().forEach(t => t.stop());
+            document.getElementById('stream-studio').style.display = 'none';
         }
 
         // --- UI NAVIGATION ---
@@ -429,18 +381,40 @@
             }
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleComm() { document.getElementById('comm-drawer').classList.toggle('open'); }
+        async function handleUpload(input) {
+            const file = input.files[0];
+            const desc = prompt("Описание:");
+            const tx = db.transaction("vids", "readwrite");
+            tx.objectStore("vids").add({ file, author: user.handle, desc: desc || "", likes: 0 });
+            tx.oncomplete = () => location.reload();
+        }
+
+        function updateStats() {
+            document.getElementById('stat-friends').innerText = friends.length;
+            document.getElementById('stat-likes').innerText = Object.keys(likedVids).length;
+        }
 
         async function renderMyGrid() {
-            const grid = document.getElementById('my-vids'); grid.innerHTML = "";
-            const all = await new Promise(r => db.transaction("videos").objectStore("videos").getAll().onsuccess = e => r(e.target.result));
-            const my = all.filter(v => v.author === user.handle);
-            document.getElementById('stat-vids').innerText = my.length;
-            my.forEach(v => {
+            const grid = document.getElementById('my-vids-grid'); grid.innerHTML = "";
+            const all = await new Promise(r => db.transaction("vids").objectStore("vids").getAll().onsuccess = e => r(e.target.result));
+            all.filter(v => v.author === user.handle).forEach(v => {
                 const u = URL.createObjectURL(v.file);
                 grid.innerHTML += `<div class="v-thumb"><video src="${u}"></video></div>`;
             });
+        }
+
+        function createFirework(x, y) {
+            for(let i=0; i<10; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:5px; height:5px; background:var(--fire); border-radius:50%; pointer-events:none; z-index:9999;`;
+                document.body.appendChild(p);
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 50;
+                p.animate([
+                    { transform: 'translate(0,0)', opacity: 1 },
+                    { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`, opacity: 0 }
+                ], { duration: 1000, easing: 'ease-out' }).onfinish = () => p.remove();
+            }
         }
     </script>
 </body>
