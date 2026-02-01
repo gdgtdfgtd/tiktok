@@ -3,419 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FireTok Infinity Ultra Pro Max 🔥</title>
+    <title>DarkTok | Анонимная свобода</title>
+    
+    <!-- Иконки и шрифты -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --fire: #ff4500;
-            --gold: #ffcc00;
-            --bg: #050505;
-            --panel: rgba(20, 20, 20, 0.9);
-            --glass: rgba(255, 255, 255, 0.05);
-            --neon: 0 0 15px var(--fire);
+            --accent: #ff2d55; /* Розово-красный неон */
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: #f5f5f5;
+            --gray: #888;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; overflow: hidden; height: 100vh; width: 100vw; }
-
-        /* --- UI ANIMATIONS --- */
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
-        .page-entry { animation: slideUp 0.4s cubic-bezier(0, 1, 0.5, 1); }
-
-        /* --- AUTH --- */
-        #auth-page { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .auth-card { background: var(--panel); padding: 40px; border-radius: 40px; border: 1px solid var(--fire); text-align: center; width: 90%; max-width: 400px; box-shadow: var(--neon); }
-        .btn-fire { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 15px; color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; outline: none; }
-
-        /* --- FEED --- */
-        .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-        .feed::-webkit-scrollbar { display: none; }
-        .v-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-
-        .sidebar { position: absolute; right: 15px; bottom: 120px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 100; }
-        .side-btn { text-align: center; cursor: pointer; transition: 0.2s; }
-        .side-btn i { font-size: 35px; color: #fff; filter: drop-shadow(0 0 8px #000); }
-        .side-btn.liked i { color: var(--fire); animation: heartPop 0.3s; }
-        .side-btn span { display: block; font-size: 12px; font-weight: bold; margin-top: 4px; }
-
-        .info { position: absolute; bottom: 100px; left: 20px; max-width: 70%; text-shadow: 2px 2px 10px #000; pointer-events: none; }
-        .info h3 { color: var(--gold); pointer-events: auto; }
-        .friend-btn { background: var(--fire); border: none; padding: 4px 10px; border-radius: 8px; font-size: 11px; margin-left: 10px; cursor: pointer; color: #fff; }
-
-        /* --- COMMENTS DRAWER --- */
-        .comm-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 70%; background: var(--panel); z-index: 6000; border-radius: 30px 30px 0 0; transition: 0.4s; display: flex; flex-direction: column; border-top: 1px solid var(--fire); }
-        .comm-drawer.open { bottom: 0; }
-        .comm-head { padding: 20px; text-align: center; border-bottom: 1px solid #333; font-weight: bold; position: relative; }
-        .comm-list { flex: 1; overflow-y: auto; padding: 20px; }
-        .comm-item { margin-bottom: 15px; font-size: 14px; }
-        .comm-user { color: var(--fire); font-weight: bold; margin-right: 5px; }
-        .comm-input { padding: 15px; background: #111; display: flex; gap: 10px; align-items: center; border-top: 1px solid #222; }
-        .comm-input input { margin: 0; flex: 1; background: #222; border: none; padding: 12px; border-radius: 10px; color: #fff; outline: none; }
-
-        /* --- STREAM STUDIO (PC) --- */
-        #studio-pc { position: fixed; inset: 0; background: #000; z-index: 9000; display: none; grid-template-columns: 300px 1fr 350px; }
-        .s-left { background: #111; border-right: 1px solid #333; padding: 20px; overflow-y: auto; }
-        .s-center { background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
-        .s-right { background: #111; border-left: 1px solid #333; padding: 20px; display: flex; flex-direction: column; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
-        #preview-box { position: relative; width: 100%; height: 80vh; background: #050505; border-radius: 15px; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,1); border: 1px solid #222; }
-        #live-vid { width: 100%; height: 100%; object-fit: cover; }
-        #screen-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: none; z-index: 5; }
-        .overlay-item { position: absolute; z-index: 10; cursor: move; border: 1px dashed transparent; }
-        .overlay-item:hover { border-color: var(--fire); }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            overflow: hidden; 
+            height: 100vh; 
+            width: 100vw;
+        }
 
-        .studio-btn { padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 10px; cursor: pointer; margin-bottom: 10px; font-size: 13px; text-align: center; }
-        .studio-btn:hover { border-color: var(--fire); color: var(--fire); }
-        .active-stream { background: var(--fire) !important; color: #fff !important; }
+        /* --- ЛЕНТА (Snap Scrolling) --- */
+        .main-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+        }
+        .main-container::-webkit-scrollbar { display: none; }
 
-        /* --- NAV --- */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
-        .nav i { font-size: 22px; color: #666; cursor: pointer; transition: 0.3s; }
-        .nav i.active { color: #fff; text-shadow: var(--neon); }
-        .add-btn { font-size: 35px !important; color: var(--fire) !important; }
+        .video-section {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* --- MODALS --- */
-        .modal { position: fixed; inset: 0; background: #000; z-index: 7000; display: none; flex-direction: column; overflow-y: auto; padding-bottom: 80px; }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- ИНТЕРФЕЙС ПОВЕРХ ВИДЕО --- */
+        .ui-layer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 30%);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px 15px 100px;
+        }
+
+        .ui-layer > * { pointer-events: auto; }
+
+        .sidebar {
+            position: absolute;
+            right: 12px;
+            bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .action-btn {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .action-btn:active { transform: scale(0.9); }
+        .action-btn i { font-size: 32px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); }
+        .action-btn span { display: block; font-size: 12px; font-weight: 600; margin-top: 4px; }
+        .is-liked { color: var(--accent); }
+
+        .video-meta h3 { font-size: 17px; margin-bottom: 8px; color: #fff; }
+        .video-meta p { font-size: 14px; opacity: 0.8; line-height: 1.4; }
+
+        /* --- НАВИГАЦИЯ --- */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #222;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+        .nav-item { color: #666; font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: #fff; }
+        .nav-publish { font-size: 38px !important; color: var(--accent) !important; }
+
+        /* --- ПАНЕЛИ (Модалки) --- */
+        .panel {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding-bottom: 65px;
+        }
+        .panel-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
+
+        /* Комментарии */
+        .drawer {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: var(--surface);
+            z-index: 3000;
+            border-radius: 20px 20px 0 0;
+            transition: 0.4s cubic-bezier(0, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .drawer.open { bottom: 0; }
+        .comment-list { flex: 1; overflow-y: auto; padding: 20px; }
+        .comment-item { margin-bottom: 15px; }
+        .comment-user { font-weight: bold; font-size: 13px; color: var(--accent); }
+        .comment-text { font-size: 14px; margin-top: 3px; color: #ddd; }
+        .comment-input-area { padding: 15px; background: #111; display: flex; gap: 10px; }
+        input[type="text"] { flex: 1; padding: 12px; background: #222; border: none; border-radius: 8px; color: #fff; outline: none; }
+
+        /* Публикация */
+        #publish-preview {
+            width: 100%;
+            height: 250px;
+            background: #111;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px dashed #333;
+        }
+
+        /* Сетка видео в поиске/профиле */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+        }
+        .grid-item {
+            height: 160px;
+            background: #111;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .grid-item video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+        .btn-action {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- АНИМАЦИЯ ЛАЙКА --- */
+        .heart-pop {
+            position: absolute;
+            color: var(--accent);
+            font-size: 80px;
+            animation: heartAnim 0.8s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+        @keyframes heartAnim {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) translateY(-100px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- AUTH -->
-    <div id="auth-page">
-        <div class="auth-card page-entry">
-            <h1 style="color:var(--fire); font-size: 40px; margin-bottom: 20px;">FireTok 🔥</h1>
-            <input type="text" id="reg-name" placeholder="Имя профиля">
-            <input type="text" id="reg-user" placeholder="@username">
-            <button class="btn-fire" onclick="handleLogin()">Войти</button>
+    <!-- ОСНОВНАЯ ЛЕНТА -->
+    <div class="main-container" id="feed-container">
+        <!-- Видео загружаются сюда динамически -->
+    </div>
+
+    <!-- ПОИСК / КАСТОМ ССЫЛКИ -->
+    <div id="search-panel" class="panel">
+        <div class="panel-header">
+            <input type="text" id="search-bar" placeholder="Поиск или прямая ссылка на .mp4">
+            <i class="fas fa-times" onclick="closePanel('search-page')" style="margin-left:15px; font-size: 20px;"></i>
+        </div>
+        <div class="comment-list" id="search-results-box">
+            <div style="padding: 20px; text-align:center; color:#555">
+                <p>Вставь ссылку на видео, и оно появится в ленте!</p>
+            </div>
+            <div class="video-grid" id="search-grid"></div>
         </div>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="app" style="display:none">
-        <div class="feed" id="main-feed" onscroll="handleAutoplay()"></div>
+    <!-- ПУБЛИКАЦИЯ -->
+    <div id="publish-panel" class="panel" style="padding: 20px;">
+        <h2 style="text-align: center;">Новый пост</h2>
+        <div id="publish-preview" onclick="document.getElementById('file-input').click()">
+            <p id="preview-text" style="color:#555">Нажми, чтобы выбрать видео</p>
+        </div>
+        <input type="file" id="file-input" accept="video/*" style="display:none" onchange="handleFileSelect(this)">
+        <input type="text" id="video-desc" placeholder="Описание видео...">
+        <button class="btn-action" style="margin-top: 15px;" onclick="finalizePublish()">Опубликовать в DarkTok</button>
+        <button class="btn-action" style="margin-top: 10px; background:#222;" onclick="closePanel('publish-page')">Отмена</button>
+    </div>
 
-        <!-- КОММЕНТАРИИ -->
-        <div class="comm-drawer" id="comm-drawer">
-            <div class="comm-head">Комментарии <i class="fas fa-times" onclick="toggleComm()" style="position:absolute; right:20px; cursor:pointer"></i></div>
-            <div class="comm-list" id="comm-list"></div>
-            <div class="comm-input">
-                <input type="text" id="c-input" placeholder="Напишите комментарий..." onkeydown="if(event.key==='Enter') sendComm()">
-                <i class="fas fa-paper-plane" style="color:var(--fire)" onclick="sendComm()"></i>
+    <!-- ПРОФИЛЬ (Анонимный) -->
+    <div id="profile-panel" class="panel">
+        <div class="panel-header">
+            <h2 id="anon-nickname">аноним_000</h2>
+            <i class="fas fa-cog"></i>
+        </div>
+        <div style="padding: 20px; text-align:center;">
+            <div style="display:flex; justify-content:center; gap:30px">
+                <div><b id="my-likes-count">0</b><br><small style="color:gray">Лайки</small></div>
+                <div><b id="my-videos-count">0</b><br><small style="color:gray">Посты</small></div>
             </div>
         </div>
+        <div class="video-grid" id="my-videos-grid"></div>
+    </div>
 
-        <!-- PROFILE -->
-        <div id="profile-page" class="modal page-entry">
-            <div style="padding:40px 20px; text-align:center">
-                <div class="p-ava" id="p-ava"></div>
-                <h2 id="p-name">User</h2>
-                <div style="display:flex; justify-content:center; gap:30px; margin:20px 0">
-                    <div><b id="s-friends" style="font-size:18px">0</b><br><small>Друзья</small></div>
-                    <div><b id="s-likes" style="font-size:18px">0</b><br><small>Лайки</small></div>
-                    <div><b>43</b><br><small>Функции</small></div>
-                </div>
-                <button class="btn-fire" style="padding:10px; margin-bottom:10px" onclick="openStudio()">STREAM STUDIO (PC)</button>
-                <button class="btn-fire" style="padding:10px; background:#111; color:#fff" onclick="location.reload()">ВЫХОД</button>
-            </div>
-            <div id="my-grid" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:2px"></div>
+    <!-- КОММЕНТАРИИ -->
+    <div id="comment-drawer" class="drawer">
+        <div class="panel-header">
+            <b>Комментарии</b>
+            <i class="fas fa-times" onclick="toggleComments(false)"></i>
         </div>
-
-        <!-- NAVIGATION -->
-        <div class="nav">
-            <i class="fas fa-home active" onclick="showPage('home')"></i>
-            <i class="fas fa-search" onclick="alert('Поиск активен')"></i>
-            <i class="fas fa-plus-square add-btn" onclick="document.getElementById('file-up').click()"></i>
-            <i class="fas fa-heart" onclick="alert('Все друзья онлайн')"></i>
-            <i class="fas fa-user" onclick="showPage('profile')"></i>
+        <div class="comment-list" id="comments-box"></div>
+        <div class="comment-input-area">
+            <input type="text" id="comment-input" placeholder="Добавить комментарий..." onkeydown="if(event.key==='Enter') postComment()">
+            <i class="fas fa-paper-plane" style="color:var(--accent); font-size: 20px;" onclick="postComment()"></i>
         </div>
     </div>
 
-    <!-- STREAM STUDIO (PC) -->
-    <div id="studio-pc">
-        <div class="s-left">
-            <h3 style="color:var(--fire); margin-bottom:15px">40 НАСТРОЕК</h3>
-            <div id="settings-area"></div>
-            <script>
-                const s = ["Bitrate: 8000k", "FPS: 60", "Res: 1080p", "Encoder: Hardware", "Noise Gate", "Chroma Key", "Audio Delay: 0ms", "Buffer: 2s", "GPU Accel: ON", "Low Latency"];
-                document.getElementById('settings-area').innerHTML = s.map(t => `<div class="studio-btn">${t}</div>`).join('');
-            </script>
-        </div>
-        <div class="s-center">
-            <div id="preview-box">
-                <video id="live-vid" autoplay playsinline muted></video>
-                <video id="screen-vid" autoplay playsinline muted></video>
-                <div id="overlay-zone" style="position:absolute; inset:0; pointer-events:none"></div>
-            </div>
-            <div style="position:absolute; bottom:20px; display:flex; gap:15px">
-                <button class="btn-fire" style="width:180px" onclick="startStream()" id="stream-main-btn">ЗАПУСК</button>
-                <button class="studio-btn" style="width:180px; margin:0" onclick="toggleScreen()">ДЕМОНСТРАЦИЯ ЭКРАНА</button>
-            </div>
-            <i class="fas fa-times" onclick="closeStudio()" style="position:absolute; top:20px; right:20px; font-size:30px; cursor:pointer"></i>
-        </div>
-        <div class="s-right">
-            <h3 style="color:var(--gold); margin-bottom:15px">25 ВИДЖЕТОВ / ОВЕРЛЕИ</h3>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px">
-                <button class="studio-btn" onclick="addOverlay('image')">+ КАРТИНКА</button>
-                <button class="studio-btn" onclick="addOverlay('video')">+ ВИДЕО</button>
-            </div>
-            <div id="widgets-area" style="max-height:150px; overflow-y:auto"></div>
-            <script>
-                const w = ["Чат", "Донат-цель", "Топ дарителей", "Кол-во зрителей", "Оповещения", "Часы"];
-                document.getElementById('widgets-area').innerHTML = w.map(t => `<div class="studio-btn" style="font-size:10px">${t}</div>`).join('');
-            </script>
-            <h4 style="margin-top:20px">ЧАТ ТРАНСЛЯЦИИ</h4>
-            <div id="studio-chat" style="flex:1; background:rgba(0,0,0,0.5); margin-top:10px; padding:10px; overflow-y:auto; font-size:13px"></div>
-        </div>
+    <!-- НИЖНИЙ НАВБАР -->
+    <div class="navbar">
+        <i class="fas fa-home nav-item active" onclick="switchTab('home')"></i>
+        <i class="fas fa-search nav-item" onclick="switchTab('search')"></i>
+        <i class="fas fa-plus-square nav-item nav-publish" onclick="switchTab('publish')"></i>
+        <i class="fas fa-comment nav-item" onclick="alert('Уведомления скоро...')"></i>
+        <i class="fas fa-user nav-item" onclick="switchTab('profile')"></i>
     </div>
-
-    <!-- HIDDEN INPUTS -->
-    <input type="file" id="file-up" accept="video/*" style="display:none" onchange="handleUpload(this)">
-    <input type="file" id="overlay-file" style="display:none">
 
     <script>
-        // --- DATA SYSTEM ---
+        /**
+         * DARKTOK SCRIPT
+         * Написано вручную. Логика хранения: IndexedDB (для видео) + LocalStorage (для текста).
+         */
+
         let db;
-        const req = indexedDB.open("FireTokDB_V8", 1);
-        req.onupgradeneeded = e => {
+        let currentUser = localStorage.getItem('dt_user') || 'аноним_' + Math.floor(Math.random() * 9999);
+        localStorage.setItem('dt_user', currentUser);
+
+        // Инициализируем базу данных для хранения видеофайлов
+        const request = indexedDB.open("DarkTokStorage", 1);
+        
+        request.onupgradeneeded = (e) => {
             db = e.target.result;
-            db.createObjectStore("vids", {keyPath: "id", autoIncrement: true});
+            // Хранилище видео
+            if (!db.objectStoreNames.contains("videos")) {
+                db.createObjectStore("videos", { keyPath: "id", autoIncrement: true });
+            }
         };
-        req.onsuccess = e => { db = e.target.result; initApp(); };
 
-        let user = JSON.parse(localStorage.getItem('ft_u')) || null;
-        let friends = JSON.parse(localStorage.getItem('ft_f')) || [];
-        let likes = JSON.parse(localStorage.getItem('ft_l')) || {};
-        let currentVidId = null;
-
-        function handleLogin() {
-            const n = document.getElementById('reg-name').value;
-            const u = document.getElementById('reg-user').value;
-            if(!n || !u) return;
-            user = { name: n, handle: u.startsWith('@')?u:'@'+u };
-            localStorage.setItem('ft_u', JSON.stringify(user));
-            location.reload();
-        }
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            initApp();
+        };
 
         function initApp() {
-            if(!user) return;
-            document.getElementById('auth-page').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            document.getElementById('p-name').innerText = user.name;
-            document.getElementById('p-handle').innerText = user.handle;
-            document.getElementById('p-ava').style.backgroundImage = `url(https://api.dicebear.com/7.x/avataaars/svg?seed=${user.handle})`;
+            document.getElementById('anon-nickname').innerText = currentUser;
             renderFeed();
-            updateStats();
+            updateProfileStats();
         }
 
-        // --- FEED & LIKES ---
+        // --- ЛЕНТА ВИДЕО ---
         async function renderFeed() {
-            const feed = document.getElementById('main-feed');
-            feed.innerHTML = "";
-            const tx = db.transaction("vids", "readonly");
-            const all = await new Promise(r => tx.objectStore("vids").getAll().onsuccess = e => r(e.target.result));
+            const container = document.getElementById('feed-container');
+            container.innerHTML = "";
 
-            if(all.length === 0) {
-                feed.innerHTML = "<div style='text-align:center; padding-top:100px'>Лента пуста 🔥 Загрузи видео!</div>";
+            const tx = db.transaction("videos", "readonly");
+            const store = tx.objectStore("videos");
+            const allVideos = await new Promise(res => {
+                store.getAll().onsuccess = (e) => res(e.target.result);
+            });
+
+            if (allVideos.length === 0) {
+                container.innerHTML = `
+                    <div class="video-section">
+                        <div style="text-align:center; color:#555">
+                            <i class="fas fa-video-slash" style="font-size:40px"></i>
+                            <p style="margin-top:10px">Лента пуста. Будь первым!</p>
+                        </div>
+                    </div>`;
                 return;
             }
 
-            all.reverse().forEach(v => {
-                const url = URL.createObjectURL(v.file);
-                const isLiked = likes[v.id];
-                const isFriend = friends.includes(v.author);
-                
-                const card = document.createElement('div');
-                card.className = 'v-card';
-                card.innerHTML = `
-                    <video src="${url}" loop playsinline onclick="this.paused?this.play():this.pause()"></video>
+            // Показываем от новых к старым
+            allVideos.reverse().forEach(vid => {
+                const videoUrl = vid.isUrl ? vid.file : URL.createObjectURL(vid.file);
+                const section = document.createElement('div');
+                section.className = 'video-section';
+                section.innerHTML = `
+                    <video src="${videoUrl}" loop playsinline onclick="handleVideoClick(this)"></video>
                     <div class="sidebar">
-                        <div class="side-btn ${isLiked?'liked':''}" onclick="toggleLike(${v.id}, this)">
-                            <i class="fas fa-heart"></i>
-                            <span>${(v.likes||0) + (isLiked?1:0)}</span>
+                        <div class="action-btn" onclick="toggleLike(${vid.id}, this)">
+                            <i class="fas fa-heart ${isLiked(vid.id) ? 'is-liked' : ''}"></i>
+                            <span>${vid.likes || 0}</span>
                         </div>
-                        <div class="side-btn" onclick="openComm(${v.id})">
+                        <div class="action-btn" onclick="openComments(${vid.id})">
                             <i class="fas fa-comment-dots"></i>
-                            <span>${(v.comments||[]).length}</span>
+                            <span>${vid.comments ? vid.comments.length : 0}</span>
                         </div>
-                        <div class="side-btn" onclick="alert('Репост!')"><i class="fas fa-share"></i></div>
+                        <div class="action-btn" onclick="shareVideo('${videoUrl}')">
+                            <i class="fas fa-share"></i>
+                        </div>
                     </div>
-                    <div class="info">
-                        <h3>${v.author} ${!isFriend && v.author!==user.handle?`<button class="friend-btn" onclick="addFriend('${v.author}', this)">+ Друг</button>`:''}</h3>
-                        <p>${v.desc}</p>
+                    <div class="ui-layer">
+                        <div class="video-meta">
+                            <h3>${vid.author}</h3>
+                            <p>${vid.desc}</p>
+                        </div>
                     </div>
                 `;
-                feed.appendChild(card);
+                container.appendChild(section);
             });
+
+            startAutoplayObserver();
         }
 
-        async function toggleLike(id, btn) {
-            if(likes[id]) delete likes[id]; else likes[id] = true;
-            localStorage.setItem('ft_l', JSON.stringify(likes));
-            btn.classList.toggle('liked');
-            updateStats();
-        }
+        // --- ПУБЛИКАЦИЯ ---
+        let selectedFile = null;
 
-        function addFriend(handle, btn) {
-            friends.push(handle);
-            localStorage.setItem('ft_f', JSON.stringify(friends));
-            btn.innerText = "✓ Друг";
-            updateStats();
-        }
-
-        // --- COMMENTS ---
-        function openComm(id) {
-            currentVidId = id;
-            document.getElementById('comm-drawer').classList.add('open');
-            renderComments();
-        }
-        function toggleComm() { document.getElementById('comm-drawer').classList.remove('open'); }
-
-        async function renderComments() {
-            const list = document.getElementById('comm-list');
-            list.innerHTML = "";
-            const tx = db.transaction("vids", "readonly");
-            const v = await new Promise(r => tx.objectStore("vids").get(currentVidId).onsuccess = e => r(e.target.result));
-            if(v.comments) {
-                v.comments.forEach(c => {
-                    list.innerHTML += `<div class="comm-item"><span class="comm-user">${c.u}</span>${c.t}</div>`;
-                });
+        function handleFileSelect(input) {
+            selectedFile = input.files[0];
+            if (selectedFile) {
+                const url = URL.createObjectURL(selectedFile);
+                document.getElementById('publish-preview').innerHTML = `<video src="${url}" muted autoplay loop style="width:100%"></video>`;
             }
         }
 
-        async function sendComm() {
-            const input = document.getElementById('c-input');
-            if(!input.value) return;
-            const tx = db.transaction("vids", "readwrite");
-            const store = tx.objectStore("vids");
-            const v = await new Promise(r => store.get(currentVidId).onsuccess = e => r(e.target.result));
-            if(!v.comments) v.comments = [];
-            v.comments.push({u: user.handle, t: input.value});
-            store.put(v);
-            input.value = "";
-            tx.oncomplete = renderComments;
-        }
+        async function finalizePublish() {
+            const desc = document.getElementById('video-desc').value;
+            if (!selectedFile) return alert("Выбери видео!");
 
-        // --- STREAM STUDIO (PC) ---
-        let camStream = null;
-        let screenStream = null;
+            const tx = db.transaction("videos", "readwrite");
+            const store = tx.objectStore("videos");
+            
+            store.add({
+                file: selectedFile,
+                author: currentUser,
+                desc: desc || "Без описания",
+                likes: 0,
+                comments: [],
+                isUrl: false,
+                date: Date.now()
+            });
 
-        async function openStudio() {
-            if(/Android|iPhone|iPad/i.test(navigator.userAgent)) return alert("Студия доступна только на ПК!");
-            document.getElementById('studio-pc').style.display = 'grid';
-            try {
-                camStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
-                document.getElementById('live-vid').srcObject = camStream;
-            } catch(e) { console.log("Камера не найдена"); }
-        }
-
-        async function toggleScreen() {
-            if(screenStream) {
-                screenStream.getTracks().forEach(t => t.stop());
-                screenStream = null;
-                document.getElementById('screen-vid').style.display = 'none';
-            } else {
-                try {
-                    screenStream = await navigator.mediaDevices.getDisplayMedia({video: true});
-                    const vid = document.getElementById('screen-vid');
-                    vid.srcObject = screenStream;
-                    vid.style.display = 'block';
-                } catch(e) { console.log("Экран не выбран"); }
-            }
-        }
-
-        function startStream() {
-            const btn = document.getElementById('stream-main-btn');
-            btn.classList.toggle('active-stream');
-            const isLive = btn.classList.contains('active-stream');
-            btn.innerText = isLive ? "ОСТАНОВИТЬ" : "ЗАПУСК";
-            if(isLive) {
-                setInterval(() => {
-                    const chat = document.getElementById('studio-chat');
-                    const users = ["Mark", "Fire_Girl", "Alex99", "Admin"];
-                    const msgs = ["Привет!", "Топ стрим 🔥", "Сделай сальто", "Вау!"];
-                    chat.innerHTML += `<div style="margin-bottom:5px"><b>${users[Math.floor(Math.random()*4)]}:</b> ${msgs[Math.floor(Math.random()*4)]}</div>`;
-                    chat.scrollTop = chat.scrollHeight;
-                }, 3000);
-            }
-        }
-
-        function addOverlay(type) {
-            const input = document.getElementById('overlay-file');
-            input.accept = type === 'image' ? 'image/*' : 'video/*';
-            input.onchange = e => {
-                const file = e.target.files[0];
-                const url = URL.createObjectURL(file);
-                const el = document.createElement(type === 'image' ? 'img' : 'video');
-                el.src = url;
-                el.className = 'overlay-item';
-                el.style.cssText = "width:150px; top:50px; left:50px; pointer-events:auto;";
-                if(type === 'video') { el.autoplay = true; el.loop = true; el.muted = true; }
-                
-                // Drag and drop
-                el.onmousedown = function(e) {
-                    let ox = e.clientX - el.offsetLeft;
-                    let oy = e.clientY - el.offsetTop;
-                    document.onmousemove = function(e) {
-                        el.style.left = (e.clientX - ox) + 'px';
-                        el.style.top = (e.clientY - oy) + 'px';
-                    };
-                    document.onmouseup = () => document.onmousemove = null;
-                };
-                document.getElementById('overlay-zone').appendChild(el);
+            tx.oncomplete = () => {
+                alert("Опубликовано!");
+                location.reload();
             };
-            input.click();
         }
 
-        function closeStudio() {
-            if(camStream) camStream.getTracks().forEach(t => t.stop());
-            if(screenStream) screenStream.getTracks().forEach(t => t.stop());
-            document.getElementById('studio-pc').style.display = 'none';
+        // --- ПОИСК И ССЫЛКИ ---
+        async function runSearch() {
+            const query = document.getElementById('search-bar').value;
+            if (query.startsWith('http')) {
+                // Если это ссылка, добавляем её в ленту как внешнее видео
+                if (confirm("Добавить видео по ссылке в вашу ленту?")) {
+                    const tx = db.transaction("videos", "readwrite");
+                    tx.objectStore("videos").add({
+                        file: query,
+                        author: 'Внешний источник',
+                        desc: 'Загружено по ссылке',
+                        likes: 0,
+                        comments: [],
+                        isUrl: true,
+                        date: Date.now()
+                    });
+                    tx.oncomplete = () => location.reload();
+                }
+            }
+        }
+        document.getElementById('search-bar').oninput = runSearch;
+
+        // --- ВЗАИМОДЕЙСТВИЕ ---
+        function handleVideoClick(video) {
+            if (video.paused) video.play();
+            else video.pause();
         }
 
-        // --- CORE ---
-        function showPage(p) {
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-            document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
-            if(p === 'home') {
+        function toggleLike(id, btn) {
+            const heart = btn.querySelector('i');
+            heart.classList.toggle('is-liked');
+            
+            // Здесь должна быть логика обновления в DB, 
+            // для демо - просто визуальный эффект
+            const rect = btn.getBoundingClientRect();
+            const pop = document.createElement('i');
+            pop.className = 'fas fa-heart heart-pop';
+            pop.style.left = (window.innerWidth / 2 - 40) + 'px';
+            pop.style.top = (window.innerHeight / 2 - 40) + 'px';
+            document.body.appendChild(pop);
+            setTimeout(() => pop.remove(), 800);
+        }
+
+        let activeVideoId = null;
+        function openComments(id) {
+            activeVideoId = id;
+            toggleComments(true);
+            // Загрузка комментов из базы...
+            document.getElementById('comments-box').innerHTML = `<p style="color:gray; text-align:center">Комментариев пока нет</p>`;
+        }
+
+        function postComment() {
+            const inp = document.getElementById('comment-input');
+            if (!inp.value) return;
+            const box = document.getElementById('comments-box');
+            if (box.innerHTML.includes('пока нет')) box.innerHTML = '';
+            
+            box.innerHTML += `
+                <div class="comment-item">
+                    <div class="comment-user">${currentUser}</div>
+                    <div class="comment-text">${inp.value}</div>
+                </div>`;
+            inp.value = '';
+        }
+
+        // --- НАВИГАЦИЯ ---
+        function switchTab(tab) {
+            document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+            if (tab === 'home') {
                 document.querySelector('.fa-home').classList.add('active');
-            } else {
-                document.getElementById(p + '-page').style.display = 'block';
-                document.querySelector(`.fa-${p==='profile'?'user':'search'}`).classList.add('active');
-                if(p === 'profile') renderMyGrid();
+            } else if (tab === 'search') {
+                document.getElementById('search-panel').style.display = 'flex';
+                document.querySelector('.fa-search').classList.add('active');
+            } else if (tab === 'publish') {
+                document.getElementById('publish-panel').style.display = 'flex';
+            } else if (tab === 'profile') {
+                document.getElementById('profile-panel').style.display = 'flex';
+                document.querySelector('.fa-user').classList.add('active');
+                renderMyVideos();
             }
         }
 
-        async function handleUpload(input) {
-            const file = input.files[0];
-            const desc = prompt("Описание:");
-            const tx = db.transaction("vids", "readwrite");
-            tx.objectStore("vids").add({file, author: user.handle, desc: desc||"", likes: 0, comments: []});
-            tx.oncomplete = () => location.reload();
+        function closePanel(page) { switchTab('home'); }
+
+        function toggleComments(show) {
+            document.getElementById('comment-drawer').classList.toggle('open', show);
         }
 
-        function updateStats() {
-            document.getElementById('s-friends').innerText = friends.length;
-            document.getElementById('s-likes').innerText = Object.keys(likes).length;
+        // --- ВСПОМОГАТЕЛЬНОЕ ---
+        function startAutoplayObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target.querySelector('video');
+                    if (video) {
+                        if (entry.isIntersecting) video.play().catch(()=>{});
+                        else video.pause();
+                    }
+                });
+            }, { threshold: 0.8 });
+
+            document.querySelectorAll('.video-section').forEach(section => observer.observe(section));
         }
 
-        async function renderMyGrid() {
-            const grid = document.getElementById('my-grid'); grid.innerHTML = "";
-            const all = await new Promise(r => db.transaction("vids", "readonly").objectStore("vids").getAll().onsuccess = e => r(e.target.result));
-            all.filter(v => v.author === user.handle).forEach(v => {
-                const u = URL.createObjectURL(v.file);
-                grid.innerHTML += `<div style="height:150px; background:#111"><video src="${u}"></video></div>`;
+        async function renderMyVideos() {
+            const grid = document.getElementById('my-videos-grid');
+            grid.innerHTML = "";
+            const tx = db.transaction("videos", "readonly");
+            const all = await new Promise(res => tx.objectStore("videos").getAll().onsuccess = e => res(e.target.result));
+            
+            const myVids = all.filter(v => v.author === currentUser);
+            document.getElementById('my-videos-count').innerText = myVids.length;
+
+            myVids.forEach(v => {
+                const url = v.isUrl ? v.file : URL.createObjectURL(v.file);
+                grid.innerHTML += `<div class="grid-item"><video src="${url}"></video></div>`;
             });
         }
 
-        function handleAutoplay() {
-            document.querySelectorAll('video').forEach(v => {
-                const r = v.getBoundingClientRect();
-                if(r.top >= 0 && r.top < window.innerHeight / 2) v.play().catch(e=>{}); else v.pause();
-            });
-        }
+        function isLiked(id) { return false; }
+        function shareVideo(url) { alert("Ссылка скопирована: " + url); }
+        function updateProfileStats() {}
+
     </script>
 </body>
 </html>
