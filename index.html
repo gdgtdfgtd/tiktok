@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FireTok Infinity Ultra Pro 🔥</title>
+    <title>FireTok Infinity Ultra Pro Max 🔥</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --fire: #ff4500;
             --gold: #ffcc00;
             --bg: #050505;
-            --panel: rgba(20, 20, 20, 0.8);
+            --panel: rgba(20, 20, 20, 0.9);
             --glass: rgba(255, 255, 255, 0.05);
             --neon: 0 0 15px var(--fire);
         }
@@ -18,173 +18,179 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; overflow: hidden; height: 100vh; width: 100vw; }
 
-        /* --- ANIMATIONS --- */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--fire); } 50% { box-shadow: 0 0 25px var(--fire); } 100% { box-shadow: 0 0 5px var(--fire); } }
-        .page-transition { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* --- UI ANIMATIONS --- */
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .page-entry { animation: slideUp 0.4s cubic-bezier(0, 1, 0.5, 1); }
 
         /* --- AUTH --- */
         #auth-page { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .auth-card { background: var(--panel); padding: 40px; border-radius: 40px; border: 1px solid var(--fire); backdrop-filter: blur(20px); text-align: center; width: 90%; max-width: 400px; box-shadow: var(--neon); }
-        input { width: 100%; padding: 18px; margin: 12px 0; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; border-radius: 15px; font-size: 16px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--fire); background: rgba(255,69,0,0.1); }
-        .btn-fire { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 15px; color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .btn-fire:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,69,0,0.4); }
-
-        /* --- STREAM STUDIO (PC ONLY) --- */
-        #stream-studio { position: fixed; inset: 0; background: #000; z-index: 9000; display: none; grid-template-columns: 300px 1fr 350px; }
-        .studio-sidebar { background: var(--panel); border-right: 1px solid #333; padding: 20px; overflow-y: auto; }
-        .studio-main { position: relative; background: #111; display: flex; align-items: center; justify-content: center; }
-        .studio-right { background: var(--panel); border-left: 1px solid #333; padding: 20px; display: flex; flex-direction: column; }
-        
-        #stream-preview { width: 100%; max-height: 80vh; border-radius: 10px; background: #000; box-shadow: 0 0 50px #000; }
-        .overlay-layer { position: absolute; pointer-events: none; border: 2px dashed transparent; }
-        .overlay-layer.active { border-color: var(--fire); pointer-events: auto; }
-
-        .settings-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .setting-item { background: var(--glass); padding: 12px; border-radius: 10px; font-size: 12px; border: 1px solid #222; }
-        .setting-item label { display: block; margin-bottom: 5px; color: var(--gray); }
-        .setting-item select, .setting-item input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 5px; }
-
-        .widget-item { padding: 10px; margin-bottom: 5px; background: rgba(255,255,255,0.05); border-radius: 5px; display: flex; justify-content: space-between; font-size: 12px; cursor: pointer; }
-        .widget-item:hover { background: var(--fire); color: #000; }
+        .auth-card { background: var(--panel); padding: 40px; border-radius: 40px; border: 1px solid var(--fire); text-align: center; width: 90%; max-width: 400px; box-shadow: var(--neon); }
+        .btn-fire { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 15px; color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; outline: none; }
 
         /* --- FEED --- */
         .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+        .feed::-webkit-scrollbar { display: none; }
         .v-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
         video { width: 100%; height: 100%; object-fit: cover; }
 
-        .sidebar { position: absolute; right: 15px; bottom: 120px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 100; }
-        .side-btn { text-align: center; cursor: pointer; transition: 0.3s; }
-        .side-btn i { font-size: 38px; color: #fff; filter: drop-shadow(0 0 10px #000); }
-        .side-btn.liked i { color: var(--fire); animation: glow 2s infinite; }
-        .side-btn span { display: block; font-size: 12px; font-weight: bold; margin-top: 5px; }
+        .sidebar { position: absolute; right: 15px; bottom: 120px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 100; }
+        .side-btn { text-align: center; cursor: pointer; transition: 0.2s; }
+        .side-btn i { font-size: 35px; color: #fff; filter: drop-shadow(0 0 8px #000); }
+        .side-btn.liked i { color: var(--fire); animation: heartPop 0.3s; }
+        .side-btn span { display: block; font-size: 12px; font-weight: bold; margin-top: 4px; }
 
-        .info { position: absolute; bottom: 100px; left: 20px; max-width: 75%; text-shadow: 2px 2px 10px #000; pointer-events: none; }
-        .info h3 { font-size: 20px; color: var(--gold); display: flex; align-items: center; gap: 10px; pointer-events: auto; }
-        .add-friend-btn { background: var(--fire); border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; color: #fff; cursor: pointer; pointer-events: auto; transition: 0.2s; }
-        .add-friend-btn.added { background: #333; }
+        .info { position: absolute; bottom: 100px; left: 20px; max-width: 70%; text-shadow: 2px 2px 10px #000; pointer-events: none; }
+        .info h3 { color: var(--gold); pointer-events: auto; }
+        .friend-btn { background: var(--fire); border: none; padding: 4px 10px; border-radius: 8px; font-size: 11px; margin-left: 10px; cursor: pointer; color: #fff; }
 
-        /* --- NAVIGATION --- */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
-        .nav i { font-size: 24px; color: #666; transition: 0.3s; }
+        /* --- COMMENTS DRAWER --- */
+        .comm-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 70%; background: var(--panel); z-index: 6000; border-radius: 30px 30px 0 0; transition: 0.4s; display: flex; flex-direction: column; border-top: 1px solid var(--fire); }
+        .comm-drawer.open { bottom: 0; }
+        .comm-head { padding: 20px; text-align: center; border-bottom: 1px solid #333; font-weight: bold; position: relative; }
+        .comm-list { flex: 1; overflow-y: auto; padding: 20px; }
+        .comm-item { margin-bottom: 15px; font-size: 14px; }
+        .comm-user { color: var(--fire); font-weight: bold; margin-right: 5px; }
+        .comm-input { padding: 15px; background: #111; display: flex; gap: 10px; align-items: center; border-top: 1px solid #222; }
+        .comm-input input { margin: 0; flex: 1; background: #222; border: none; padding: 12px; border-radius: 10px; color: #fff; outline: none; }
+
+        /* --- STREAM STUDIO (PC) --- */
+        #studio-pc { position: fixed; inset: 0; background: #000; z-index: 9000; display: none; grid-template-columns: 300px 1fr 350px; }
+        .s-left { background: #111; border-right: 1px solid #333; padding: 20px; overflow-y: auto; }
+        .s-center { background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
+        .s-right { background: #111; border-left: 1px solid #333; padding: 20px; display: flex; flex-direction: column; }
+        
+        #preview-box { position: relative; width: 100%; height: 80vh; background: #050505; border-radius: 15px; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,1); border: 1px solid #222; }
+        #live-vid { width: 100%; height: 100%; object-fit: cover; }
+        #screen-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: none; z-index: 5; }
+        .overlay-item { position: absolute; z-index: 10; cursor: move; border: 1px dashed transparent; }
+        .overlay-item:hover { border-color: var(--fire); }
+
+        .studio-btn { padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 10px; cursor: pointer; margin-bottom: 10px; font-size: 13px; text-align: center; }
+        .studio-btn:hover { border-color: var(--fire); color: var(--fire); }
+        .active-stream { background: var(--fire) !important; color: #fff !important; }
+
+        /* --- NAV --- */
+        .nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
+        .nav i { font-size: 22px; color: #666; cursor: pointer; transition: 0.3s; }
         .nav i.active { color: #fff; text-shadow: var(--neon); }
-        .add-btn { font-size: 40px !important; color: var(--fire) !important; filter: drop-shadow(var(--neon)); }
+        .add-btn { font-size: 35px !important; color: var(--fire) !important; }
 
         /* --- MODALS --- */
-        .modal { position: fixed; inset: 0; background: #000; z-index: 8000; display: none; flex-direction: column; }
-        .modal-header { padding: 25px; display: flex; justify-content: space-between; border-bottom: 1px solid #222; align-items: center; font-size: 20px; font-weight: bold; }
-        
-        .p-ava { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--fire); margin: 0 auto 20px; background-size: cover; box-shadow: var(--neon); }
-
-        /* Чат на стриме */
-        .studio-chat { flex: 1; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; margin-top: 10px; font-size: 13px; }
-        .chat-line { margin-bottom: 5px; }
-        .chat-line b { color: var(--gold); }
+        .modal { position: fixed; inset: 0; background: #000; z-index: 7000; display: none; flex-direction: column; overflow-y: auto; padding-bottom: 80px; }
     </style>
 </head>
 <body>
 
     <!-- AUTH -->
     <div id="auth-page">
-        <div class="auth-card page-transition">
-            <h1 style="color:var(--fire); font-size: 45px; letter-spacing: -2px; margin-bottom: 10px;">FireTok</h1>
-            <p style="color:gray; margin-bottom:30px">Next-Gen Streaming Platform</p>
-            <input type="text" id="reg-name" placeholder="Твое имя">
+        <div class="auth-card page-entry">
+            <h1 style="color:var(--fire); font-size: 40px; margin-bottom: 20px;">FireTok 🔥</h1>
+            <input type="text" id="reg-name" placeholder="Имя профиля">
             <input type="text" id="reg-user" placeholder="@username">
-            <button class="btn-fire" onclick="handleRegister()">Создать профиль</button>
+            <button class="btn-fire" onclick="handleLogin()">Войти</button>
         </div>
     </div>
 
     <!-- MAIN APP -->
     <div id="app" style="display:none">
-        <!-- ЛЕНТА -->
         <div class="feed" id="main-feed" onscroll="handleAutoplay()"></div>
 
-        <!-- PROFILE PAGE -->
-        <div id="profile-page" class="modal page-transition">
-            <div class="modal-header">
-                <b id="p-handle">@user</b>
-                <i class="fas fa-bars" onclick="alert('Функции: Кошелек, Аналитика, Безопасность...')"></i>
+        <!-- КОММЕНТАРИИ -->
+        <div class="comm-drawer" id="comm-drawer">
+            <div class="comm-head">Комментарии <i class="fas fa-times" onclick="toggleComm()" style="position:absolute; right:20px; cursor:pointer"></i></div>
+            <div class="comm-list" id="comm-list"></div>
+            <div class="comm-input">
+                <input type="text" id="c-input" placeholder="Напишите комментарий..." onkeydown="if(event.key==='Enter') sendComm()">
+                <i class="fas fa-paper-plane" style="color:var(--fire)" onclick="sendComm()"></i>
             </div>
-            <div style="padding: 20px; overflow-y: auto;">
+        </div>
+
+        <!-- PROFILE -->
+        <div id="profile-page" class="modal page-entry">
+            <div style="padding:40px 20px; text-align:center">
                 <div class="p-ava" id="p-ava"></div>
-                <h2 style="text-align:center" id="p-name">Name</h2>
-                <div style="display:flex; justify-content:center; gap:30px; margin:25px 0">
-                    <div style="text-align:center"><b id="stat-friends" style="font-size:20px">0</b><br><small style="color:gray">Друзья</small></div>
-                    <div style="text-align:center"><b id="stat-likes" style="font-size:20px">0</b><br><small style="color:gray">Лайки</small></div>
-                    <div style="text-align:center"><b style="font-size:20px">43</b><br><small style="color:gray">Функции</small></div>
+                <h2 id="p-name">User</h2>
+                <div style="display:flex; justify-content:center; gap:30px; margin:20px 0">
+                    <div><b id="s-friends" style="font-size:18px">0</b><br><small>Друзья</small></div>
+                    <div><b id="s-likes" style="font-size:18px">0</b><br><small>Лайки</small></div>
+                    <div><b>43</b><br><small>Функции</small></div>
                 </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:30px">
-                    <button class="btn-fire" style="padding:10px" onclick="checkPCForStudio()">STREAM STUDIO (PC)</button>
-                    <button class="btn-fire" style="padding:10px; background: #222; color: #fff;" onclick="location.reload()">ВЫЙТИ</button>
-                </div>
-                <div id="my-vids-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2px"></div>
+                <button class="btn-fire" style="padding:10px; margin-bottom:10px" onclick="openStudio()">STREAM STUDIO (PC)</button>
+                <button class="btn-fire" style="padding:10px; background:#111; color:#fff" onclick="location.reload()">ВЫХОД</button>
             </div>
+            <div id="my-grid" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:2px"></div>
         </div>
 
         <!-- NAVIGATION -->
         <div class="nav">
             <i class="fas fa-home active" onclick="showPage('home')"></i>
-            <i class="fas fa-search" onclick="alert('Поиск: Ищите по тегам и именам')"></i>
+            <i class="fas fa-search" onclick="alert('Поиск активен')"></i>
             <i class="fas fa-plus-square add-btn" onclick="document.getElementById('file-up').click()"></i>
-            <i class="fas fa-comment-dots" onclick="alert('Уведомления пусты')"></i>
+            <i class="fas fa-heart" onclick="alert('Все друзья онлайн')"></i>
             <i class="fas fa-user" onclick="showPage('profile')"></i>
         </div>
     </div>
 
-    <!-- STREAM STUDIO (PC ONLY) -->
-    <div id="stream-studio">
-        <div class="studio-sidebar">
-            <h3 style="color:var(--fire); margin-bottom:20px">40 НАСТРОЕК</h3>
-            <div class="settings-grid" id="stream-settings-list">
-                <!-- Генерируется через JS -->
-            </div>
+    <!-- STREAM STUDIO (PC) -->
+    <div id="studio-pc">
+        <div class="s-left">
+            <h3 style="color:var(--fire); margin-bottom:15px">40 НАСТРОЕК</h3>
+            <div id="settings-area"></div>
+            <script>
+                const s = ["Bitrate: 8000k", "FPS: 60", "Res: 1080p", "Encoder: Hardware", "Noise Gate", "Chroma Key", "Audio Delay: 0ms", "Buffer: 2s", "GPU Accel: ON", "Low Latency"];
+                document.getElementById('settings-area').innerHTML = s.map(t => `<div class="studio-btn">${t}</div>`).join('');
+            </script>
         </div>
-        <div class="studio-main">
-            <div id="stream-scene" style="position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center">
-                <video id="stream-preview" autoplay playsinline muted></video>
-                <div id="overlay-container" style="position:absolute; inset:0; pointer-events:none"></div>
+        <div class="s-center">
+            <div id="preview-box">
+                <video id="live-vid" autoplay playsinline muted></video>
+                <video id="screen-vid" autoplay playsinline muted></video>
+                <div id="overlay-zone" style="position:absolute; inset:0; pointer-events:none"></div>
             </div>
-            <div style="position:absolute; top:20px; left:20px; display:flex; gap:10px; pointer-events:auto">
-                <button class="btn-fire" style="width:120px; padding:10px" onclick="addOverlay('image')">+ КАРТИНКА</button>
-                <button class="btn-fire" style="width:120px; padding:10px" onclick="addOverlay('video')">+ ВИДЕО</button>
+            <div style="position:absolute; bottom:20px; display:flex; gap:15px">
+                <button class="btn-fire" style="width:180px" onclick="startStream()" id="stream-main-btn">ЗАПУСК</button>
+                <button class="studio-btn" style="width:180px; margin:0" onclick="toggleScreen()">ДЕМОНСТРАЦИЯ ЭКРАНА</button>
             </div>
-            <button class="btn-fire" style="position:absolute; bottom:30px; width:250px" onclick="toggleStream()">ЗАПУСТИТЬ ЭФИР</button>
             <i class="fas fa-times" onclick="closeStudio()" style="position:absolute; top:20px; right:20px; font-size:30px; cursor:pointer"></i>
         </div>
-        <div class="studio-right">
-            <h3 style="color:var(--gold); margin-bottom:10px">25 ВИДЖЕТОВ</h3>
-            <div id="widgets-list" style="height:200px; overflow-y:auto; margin-bottom:20px">
-                <!-- Генерируется через JS -->
+        <div class="s-right">
+            <h3 style="color:var(--gold); margin-bottom:15px">25 ВИДЖЕТОВ / ОВЕРЛЕИ</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px">
+                <button class="studio-btn" onclick="addOverlay('image')">+ КАРТИНКА</button>
+                <button class="studio-btn" onclick="addOverlay('video')">+ ВИДЕО</button>
             </div>
-            <h3>ЧАТ ТРАНСЛЯЦИИ</h3>
-            <div class="studio-chat" id="studio-chat">
-                <div class="chat-line"><b>Система:</b> Студия готова к работе.</div>
-            </div>
+            <div id="widgets-area" style="max-height:150px; overflow-y:auto"></div>
+            <script>
+                const w = ["Чат", "Донат-цель", "Топ дарителей", "Кол-во зрителей", "Оповещения", "Часы"];
+                document.getElementById('widgets-area').innerHTML = w.map(t => `<div class="studio-btn" style="font-size:10px">${t}</div>`).join('');
+            </script>
+            <h4 style="margin-top:20px">ЧАТ ТРАНСЛЯЦИИ</h4>
+            <div id="studio-chat" style="flex:1; background:rgba(0,0,0,0.5); margin-top:10px; padding:10px; overflow-y:auto; font-size:13px"></div>
         </div>
     </div>
 
-    <!-- СКРЫТЫЕ ЭЛЕМЕНТЫ -->
+    <!-- HIDDEN INPUTS -->
     <input type="file" id="file-up" accept="video/*" style="display:none" onchange="handleUpload(this)">
-    <input type="file" id="overlay-up" style="display:none">
+    <input type="file" id="overlay-file" style="display:none">
 
     <script>
-        // --- DATABASE ---
+        // --- DATA SYSTEM ---
         let db;
-        const request = indexedDB.open("FireTokUltraDB", 7);
-        request.onupgradeneeded = e => {
+        const req = indexedDB.open("FireTokDB_V8", 1);
+        req.onupgradeneeded = e => {
             db = e.target.result;
-            if(!db.objectStoreNames.contains("vids")) db.createObjectStore("vids", {keyPath: "id", autoIncrement: true});
+            db.createObjectStore("vids", {keyPath: "id", autoIncrement: true});
         };
-        request.onsuccess = e => { db = e.target.result; initApp(); };
+        req.onsuccess = e => { db = e.target.result; initApp(); };
 
         let user = JSON.parse(localStorage.getItem('ft_u')) || null;
         let friends = JSON.parse(localStorage.getItem('ft_f')) || [];
-        let likedVids = JSON.parse(localStorage.getItem('ft_l')) || {};
+        let likes = JSON.parse(localStorage.getItem('ft_l')) || {};
+        let currentVidId = null;
 
-        function handleRegister() {
+        function handleLogin() {
             const n = document.getElementById('reg-name').value;
             const u = document.getElementById('reg-user').value;
             if(!n || !u) return;
@@ -204,7 +210,7 @@
             updateStats();
         }
 
-        // --- FEED & LIKES (FIXED) ---
+        // --- FEED & LIKES ---
         async function renderFeed() {
             const feed = document.getElementById('main-feed');
             feed.innerHTML = "";
@@ -212,13 +218,13 @@
             const all = await new Promise(r => tx.objectStore("vids").getAll().onsuccess = e => r(e.target.result));
 
             if(all.length === 0) {
-                feed.innerHTML = "<div style='padding:100px; text-align:center'><h1>Лента пуста 🔥</h1><p>Загрузи первое видео!</p></div>";
+                feed.innerHTML = "<div style='text-align:center; padding-top:100px'>Лента пуста 🔥 Загрузи видео!</div>";
                 return;
             }
 
             all.reverse().forEach(v => {
                 const url = URL.createObjectURL(v.file);
-                const isLiked = likedVids[v.id];
+                const isLiked = likes[v.id];
                 const isFriend = friends.includes(v.author);
                 
                 const card = document.createElement('div');
@@ -228,154 +234,155 @@
                     <div class="sidebar">
                         <div class="side-btn ${isLiked?'liked':''}" onclick="toggleLike(${v.id}, this)">
                             <i class="fas fa-heart"></i>
-                            <span>${v.likes + (isLiked?1:0)}</span>
+                            <span>${(v.likes||0) + (isLiked?1:0)}</span>
                         </div>
-                        <div class="side-btn"><i class="fas fa-comment-dots"></i><span>0</span></div>
-                        <div class="side-btn"><i class="fas fa-share"></i><span>Share</span></div>
+                        <div class="side-btn" onclick="openComm(${v.id})">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>${(v.comments||[]).length}</span>
+                        </div>
+                        <div class="side-btn" onclick="alert('Репост!')"><i class="fas fa-share"></i></div>
                     </div>
                     <div class="info">
-                        <h3>${v.author} ${!isFriend && v.author !== user.handle ? `<button class="add-friend-btn" onclick="addFriend('${v.author}', this)">+ Друг</button>` : ''}</h3>
+                        <h3>${v.author} ${!isFriend && v.author!==user.handle?`<button class="friend-btn" onclick="addFriend('${v.author}', this)">+ Друг</button>`:''}</h3>
                         <p>${v.desc}</p>
                     </div>
                 `;
                 feed.appendChild(card);
             });
-            handleAutoplay();
         }
 
         async function toggleLike(id, btn) {
-            const tx = db.transaction("vids", "readwrite");
-            const store = tx.objectStore("vids");
-            const v = await new Promise(r => store.get(id).onsuccess = e => r(e.target.result));
-            
-            if(likedVids[id]) {
-                delete likedVids[id];
-                btn.classList.remove('liked');
-            } else {
-                likedVids[id] = true;
-                btn.classList.add('liked');
-                createFirework(event.clientX, event.clientY);
-            }
-            
-            localStorage.setItem('ft_l', JSON.stringify(likedVids));
-            btn.querySelector('span').innerText = v.likes + (likedVids[id]?1:0);
+            if(likes[id]) delete likes[id]; else likes[id] = true;
+            localStorage.setItem('ft_l', JSON.stringify(likes));
+            btn.classList.toggle('liked');
             updateStats();
         }
 
         function addFriend(handle, btn) {
-            if(!friends.includes(handle)) {
-                friends.push(handle);
-                localStorage.setItem('ft_f', JSON.stringify(friends));
-                btn.innerText = "✓ Друзья";
-                btn.classList.add('added');
-                updateStats();
+            friends.push(handle);
+            localStorage.setItem('ft_f', JSON.stringify(friends));
+            btn.innerText = "✓ Друг";
+            updateStats();
+        }
+
+        // --- COMMENTS ---
+        function openComm(id) {
+            currentVidId = id;
+            document.getElementById('comm-drawer').classList.add('open');
+            renderComments();
+        }
+        function toggleComm() { document.getElementById('comm-drawer').classList.remove('open'); }
+
+        async function renderComments() {
+            const list = document.getElementById('comm-list');
+            list.innerHTML = "";
+            const tx = db.transaction("vids", "readonly");
+            const v = await new Promise(r => tx.objectStore("vids").get(currentVidId).onsuccess = e => r(e.target.result));
+            if(v.comments) {
+                v.comments.forEach(c => {
+                    list.innerHTML += `<div class="comm-item"><span class="comm-user">${c.u}</span>${c.t}</div>`;
+                });
             }
         }
 
-        function handleAutoplay() {
-            document.querySelectorAll('video').forEach(v => {
-                const r = v.getBoundingClientRect();
-                if(r.top >= 0 && r.top < window.innerHeight / 2) v.play().catch(e=>{});
-                else v.pause();
-            });
+        async function sendComm() {
+            const input = document.getElementById('c-input');
+            if(!input.value) return;
+            const tx = db.transaction("vids", "readwrite");
+            const store = tx.objectStore("vids");
+            const v = await new Promise(r => store.get(currentVidId).onsuccess = e => r(e.target.result));
+            if(!v.comments) v.comments = [];
+            v.comments.push({u: user.handle, t: input.value});
+            store.put(v);
+            input.value = "";
+            tx.oncomplete = renderComments;
         }
 
-        // --- STREAM STUDIO (PC LOGIC) ---
-        function checkPCForStudio() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if(isMobile) {
-                alert("Stream Studio доступна только на ПК версии!");
-            } else {
-                openStudio();
-            }
-        }
+        // --- STREAM STUDIO (PC) ---
+        let camStream = null;
+        let screenStream = null;
 
-        let studioStream = null;
         async function openStudio() {
-            document.getElementById('stream-studio').style.display = 'grid';
+            if(/Android|iPhone|iPad/i.test(navigator.userAgent)) return alert("Студия доступна только на ПК!");
+            document.getElementById('studio-pc').style.display = 'grid';
             try {
-                studioStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('stream-preview').srcObject = studioStream;
-                generateStudioControls();
-            } catch(e) { alert("Камера не найдена!"); }
+                camStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+                document.getElementById('live-vid').srcObject = camStream;
+            } catch(e) { console.log("Камера не найдена"); }
         }
 
-        function generateStudioControls() {
-            const settings = [
-                "Resolution: 1080p", "FPS: 60", "Bitrate: 6000kbps", "Mic Gain: 80%", "Noise Gate: ON",
-                "Echo Cancel: ON", "Encoder: Hardware", "Keyframe: 2s", "Chroma Key: OFF", "Mirror Mode",
-                "Auto-Reconnect", "Low Latency", "Audio Bitrate: 320kbps", "Buffer size: 4MB", "Video Filter: None",
-                "Saturation: 1.2", "Contrast: 1.1", "Gamma: 1.0", "Watermark: OFF", "Overlay Opacity: 100%"
-                // ... и так далее до 40
-            ];
-            const list = document.getElementById('stream-settings-list');
-            list.innerHTML = settings.map(s => `<div class="setting-item"><label>${s}</label><input type="range"></div>`).join('');
+        async function toggleScreen() {
+            if(screenStream) {
+                screenStream.getTracks().forEach(t => t.stop());
+                screenStream = null;
+                document.getElementById('screen-vid').style.display = 'none';
+            } else {
+                try {
+                    screenStream = await navigator.mediaDevices.getDisplayMedia({video: true});
+                    const vid = document.getElementById('screen-vid');
+                    vid.srcObject = screenStream;
+                    vid.style.display = 'block';
+                } catch(e) { console.log("Экран не выбран"); }
+            }
+        }
 
-            const widgets = ["Chat Box", "Sub Alert", "Donation Goal", "Top Gifter", "Viewer Count", "CPU Usage", "Real Clock", "Top Likers", "Song Info"];
-            document.getElementById('widgets-list').innerHTML = widgets.map(w => `<div class="widget-item"><span>${w}</span><i class="fas fa-plus"></i></div>`).join('');
+        function startStream() {
+            const btn = document.getElementById('stream-main-btn');
+            btn.classList.toggle('active-stream');
+            const isLive = btn.classList.contains('active-stream');
+            btn.innerText = isLive ? "ОСТАНОВИТЬ" : "ЗАПУСК";
+            if(isLive) {
+                setInterval(() => {
+                    const chat = document.getElementById('studio-chat');
+                    const users = ["Mark", "Fire_Girl", "Alex99", "Admin"];
+                    const msgs = ["Привет!", "Топ стрим 🔥", "Сделай сальто", "Вау!"];
+                    chat.innerHTML += `<div style="margin-bottom:5px"><b>${users[Math.floor(Math.random()*4)]}:</b> ${msgs[Math.floor(Math.random()*4)]}</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 3000);
+            }
         }
 
         function addOverlay(type) {
-            const input = document.getElementById('overlay-up');
+            const input = document.getElementById('overlay-file');
             input.accept = type === 'image' ? 'image/*' : 'video/*';
             input.onchange = e => {
                 const file = e.target.files[0];
                 const url = URL.createObjectURL(file);
                 const el = document.createElement(type === 'image' ? 'img' : 'video');
                 el.src = url;
-                el.className = 'overlay-layer';
-                el.style.cssText = `position:absolute; width:150px; top:50px; left:50px; pointer-events:auto; cursor:move; z-index:100`;
+                el.className = 'overlay-item';
+                el.style.cssText = "width:150px; top:50px; left:50px; pointer-events:auto;";
                 if(type === 'video') { el.autoplay = true; el.loop = true; el.muted = true; }
                 
-                // Простая перетаскивалка
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-                el.onmousedown = (e) => {
-                    e.preventDefault();
-                    pos3 = e.clientX; pos4 = e.clientY;
-                    document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
-                    document.onmousemove = (e) => {
-                        pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
-                        pos3 = e.clientX; pos4 = e.clientY;
-                        el.style.top = (el.offsetTop - pos2) + "px";
-                        el.style.left = (el.offsetLeft - pos1) + "px";
+                // Drag and drop
+                el.onmousedown = function(e) {
+                    let ox = e.clientX - el.offsetLeft;
+                    let oy = e.clientY - el.offsetTop;
+                    document.onmousemove = function(e) {
+                        el.style.left = (e.clientX - ox) + 'px';
+                        el.style.top = (e.clientY - oy) + 'px';
                     };
+                    document.onmouseup = () => document.onmousemove = null;
                 };
-
-                document.getElementById('overlay-container').appendChild(el);
+                document.getElementById('overlay-zone').appendChild(el);
             };
             input.click();
         }
 
-        let isLive = false;
-        function toggleStream() {
-            isLive = !isLive;
-            const btn = event.target;
-            btn.innerText = isLive ? "ОСТАНОВИТЬ ЭФИР" : "ЗАПУСТИТЬ ЭФИР";
-            btn.style.background = isLive ? "red" : "";
-            if(isLive) {
-                setInterval(() => {
-                    const chat = document.getElementById('studio-chat');
-                    const users = ["Gamer99", "FireGirl", "Admin", "Liker", "King"];
-                    const msgs = ["🔥🔥🔥", "Привет из чата!", "Топ контент!", "Подписался!", "Донат 100$!"];
-                    chat.innerHTML += `<div class="chat-line"><b>${users[Math.floor(Math.random()*5)]}:</b> ${msgs[Math.floor(Math.random()*5)]}</div>`;
-                    chat.scrollTop = chat.scrollHeight;
-                }, 3000);
-            }
-        }
-
         function closeStudio() {
-            if(studioStream) studioStream.getTracks().forEach(t => t.stop());
-            document.getElementById('stream-studio').style.display = 'none';
+            if(camStream) camStream.getTracks().forEach(t => t.stop());
+            if(screenStream) screenStream.getTracks().forEach(t => t.stop());
+            document.getElementById('studio-pc').style.display = 'none';
         }
 
-        // --- UI NAVIGATION ---
+        // --- CORE ---
         function showPage(p) {
             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
             document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
             if(p === 'home') {
                 document.querySelector('.fa-home').classList.add('active');
             } else {
-                document.getElementById(p + '-page').style.display = 'flex';
+                document.getElementById(p + '-page').style.display = 'block';
                 document.querySelector(`.fa-${p==='profile'?'user':'search'}`).classList.add('active');
                 if(p === 'profile') renderMyGrid();
             }
@@ -385,36 +392,29 @@
             const file = input.files[0];
             const desc = prompt("Описание:");
             const tx = db.transaction("vids", "readwrite");
-            tx.objectStore("vids").add({ file, author: user.handle, desc: desc || "", likes: 0 });
+            tx.objectStore("vids").add({file, author: user.handle, desc: desc||"", likes: 0, comments: []});
             tx.oncomplete = () => location.reload();
         }
 
         function updateStats() {
-            document.getElementById('stat-friends').innerText = friends.length;
-            document.getElementById('stat-likes').innerText = Object.keys(likedVids).length;
+            document.getElementById('s-friends').innerText = friends.length;
+            document.getElementById('s-likes').innerText = Object.keys(likes).length;
         }
 
         async function renderMyGrid() {
-            const grid = document.getElementById('my-vids-grid'); grid.innerHTML = "";
-            const all = await new Promise(r => db.transaction("vids").objectStore("vids").getAll().onsuccess = e => r(e.target.result));
+            const grid = document.getElementById('my-grid'); grid.innerHTML = "";
+            const all = await new Promise(r => db.transaction("vids", "readonly").objectStore("vids").getAll().onsuccess = e => r(e.target.result));
             all.filter(v => v.author === user.handle).forEach(v => {
                 const u = URL.createObjectURL(v.file);
-                grid.innerHTML += `<div class="v-thumb"><video src="${u}"></video></div>`;
+                grid.innerHTML += `<div style="height:150px; background:#111"><video src="${u}"></video></div>`;
             });
         }
 
-        function createFirework(x, y) {
-            for(let i=0; i<10; i++) {
-                const p = document.createElement('div');
-                p.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:5px; height:5px; background:var(--fire); border-radius:50%; pointer-events:none; z-index:9999;`;
-                document.body.appendChild(p);
-                const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 50;
-                p.animate([
-                    { transform: 'translate(0,0)', opacity: 1 },
-                    { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`, opacity: 0 }
-                ], { duration: 1000, easing: 'ease-out' }).onfinish = () => p.remove();
-            }
+        function handleAutoplay() {
+            document.querySelectorAll('video').forEach(v => {
+                const r = v.getBoundingClientRect();
+                if(r.top >= 0 && r.top < window.innerHeight / 2) v.play().catch(e=>{}); else v.pause();
+            });
         }
     </script>
 </body>
