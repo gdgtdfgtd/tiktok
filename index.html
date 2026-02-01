@@ -3,391 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FireTok Infinity 2.0 🔥</title>
+    <title>FireTok: Pro Infinity 🔥</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --fire: #ff4500; --gold: #ffcc00; --bg: #000; --panel: #161616; --accent: #ff2d55; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg); color: #fff; overflow: hidden; height: 100vh; width: 100vw; }
-
-        /* --- UI UTILS --- */
-        .hidden { display: none !important; }
-        .btn-fire { background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 12px; color: #000; font-weight: bold; padding: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-fire:active { transform: scale(0.95); }
+        :root { --fire: #ff4500; --gold: #ffcc00; --bg: #000; --panel: #111; --text: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; width: 100vw; }
 
         /* --- AUTH --- */
         #auth-page { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; padding: 30px; }
-        .auth-form { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid #333; }
-        input, textarea { width: 100%; padding: 14px; margin: 8px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 16px; outline: none; }
+        .auth-card { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid var(--fire); }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; outline: none; }
+        .btn-fire { width: 100%; padding: 16px; background: linear-gradient(45deg, var(--fire), var(--gold)); border: none; border-radius: 12px; color: #000; font-weight: bold; cursor: pointer; }
 
         /* --- FEED --- */
-        .feed-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-        .feed-container::-webkit-scrollbar { display: none; }
-        .video-player { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
+        .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+        .feed::-webkit-scrollbar { display: none; }
+        .v-card { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; background: #000; }
         video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Overlay */
-        .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%); pointer-events: none; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 20px 80px; }
-        .overlay > * { pointer-events: auto; }
-        .v-meta h3 { color: var(--gold); margin-bottom: 5px; }
-        .v-meta p { font-size: 14px; opacity: 0.9; }
-
-        /* Sidebar */
+        /* UI OVERLAY */
         .sidebar { position: absolute; right: 10px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
         .side-btn { text-align: center; cursor: pointer; }
-        .side-btn i { font-size: 32px; filter: drop-shadow(0 0 5px #000); transition: 0.2s; }
-        .side-btn span { display: block; font-size: 12px; margin-top: 4px; font-weight: bold; }
+        .side-btn i { font-size: 35px; filter: drop-shadow(0 0 5px #000); }
+        .side-btn span { display: block; font-size: 12px; margin-top: 5px; }
         .liked { color: var(--fire) !important; }
 
-        /* --- NAV --- */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav i { font-size: 22px; color: #777; cursor: pointer; }
-        .nav i.active { color: #fff; }
-        .add-btn { font-size: 35px !important; color: var(--fire) !important; }
+        .info { position: absolute; bottom: 80px; left: 15px; max-width: 70%; text-shadow: 1px 1px 5px #000; }
+        .follow-btn { background: var(--fire); border: none; padding: 4px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; color: #fff; margin-left: 10px; cursor: pointer; }
+
+        /* --- DRAWERS --- */
+        .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 70%; background: var(--panel); z-index: 5000; border-radius: 20px 20px 0 0; transition: 0.3s; display: flex; flex-direction: column; }
+        .drawer.active { bottom: 0; }
+        .dr-head { padding: 15px; text-align: center; border-bottom: 1px solid #222; font-weight: bold; }
+        .dr-content { flex: 1; overflow-y: auto; padding: 15px; }
+
+        /* КОММЕНТАРИИ */
+        .c-item { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+        .c-user { font-weight: bold; font-size: 13px; color: var(--gold); }
+        .c-text { background: #222; padding: 10px; border-radius: 10px; font-size: 14px; display: inline-block; max-width: 85%; }
+        .c-img { max-width: 150px; border-radius: 10px; margin-top: 5px; border: 1px solid #444; }
+        .c-audio { margin-top: 5px; height: 35px; }
+
+        .input-box { padding: 15px; background: #000; border-top: 1px solid #222; display: flex; align-items: center; gap: 10px; }
+        .media-icons { display: flex; gap: 12px; font-size: 20px; color: var(--fire); }
 
         /* --- PAGES --- */
-        .page { position: fixed; inset: 0; background: #000; z-index: 800; display: none; overflow-y: auto; padding-bottom: 70px; }
-        .p-info { text-align: center; padding: 40px 20px; }
-        .p-ava { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--fire); margin: 0 auto 15px; background: #333; }
-        .p-stats { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; }
+        .page { position: fixed; inset: 0; background: #000; z-index: 4000; display: none; overflow-y: auto; padding-bottom: 70px; }
+        .p-head { text-align: center; padding: 30px; }
+        .p-ava { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--fire); margin: 0 auto 10px; background-size: cover; }
+        .p-stats { display: flex; justify-content: center; gap: 25px; margin: 15px 0; }
         .p-stats div { text-align: center; }
         .p-stats b { display: block; font-size: 18px; }
 
-        /* Grids */
-        .v-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
-        .thumb { height: 160px; background: #111; cursor: pointer; overflow: hidden; position: relative; }
-        .thumb video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 4500; }
+        .nav i { font-size: 24px; color: #555; cursor: pointer; }
+        .nav i.active { color: #fff; }
+        .add-btn { font-size: 35px !important; color: var(--fire) !important; }
 
-        /* --- DRAWERS (COMM, UPLOAD) --- */
-        .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%; background: var(--panel); z-index: 2000; border-radius: 20px 20px 0 0; transition: 0.4s cubic-bezier(0, 1, 0.5, 1); display: flex; flex-direction: column; }
-        .drawer.open { bottom: 0; }
-        .dr-head { padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #333; }
-        .dr-list { flex: 1; overflow-y: auto; padding: 15px; }
-        
-        .c-item { margin-bottom: 12px; font-size: 14px; }
-        .c-user { font-weight: bold; color: var(--fire); margin-right: 5px; }
-        
-        .input-bar { padding: 15px; background: #111; display: flex; gap: 10px; align-items: center; }
-        .input-bar input { margin: 0; }
-
-        /* Media in comments */
-        .media-msg { background: #333; padding: 8px; border-radius: 10px; display: inline-block; margin-top: 5px; }
-        .voice { color: #00ff00; }
-
-        /* --- UPLOAD MODAL --- */
-        #upload-page { padding: 20px; text-align: center; }
-        .up-preview { width: 100%; height: 250px; background: #222; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px dashed var(--fire); }
+        /* PICKERS */
+        #sticker-picker { position: absolute; bottom: 70px; left: 0; width: 100%; background: #111; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px; height: 150px; overflow-y: auto; border-top: 2px solid var(--fire); }
+        .s-item { width: 100%; height: 60px; object-fit: contain; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- АВТОРИЗАЦИЯ -->
+    <!-- ВХОД -->
     <div id="auth-page">
-        <div class="auth-form">
+        <div class="auth-card">
             <h1 style="color:var(--fire); text-align:center; margin-bottom:20px">FireTok 🔥</h1>
-            <input type="text" id="reg-name" placeholder="Имя">
+            <input type="text" id="reg-name" placeholder="Имя профиля">
             <input type="text" id="reg-user" placeholder="@username">
-            <button class="btn-fire" style="width:100%" onclick="registerUser()">Создать аккаунт</button>
+            <button class="btn-fire" onclick="register()">Войти</button>
         </div>
     </div>
 
-    <!-- ГЛАВНАЯ ЛЕНТА -->
-    <div id="feed-page" class="feed-container"></div>
+    <!-- ОСНОВНОЕ -->
+    <div class="feed" id="main-feed" onscroll="handleAutoplay()"></div>
 
-    <!-- ПОИСК -->
-    <div id="search-page" class="page">
-        <div style="padding:15px">
-            <input type="text" id="search-input" placeholder="Поиск по хештегам..." oninput="searchVideos()">
+    <!-- КОММЕНТАРИИ -->
+    <div class="drawer" id="comm-drawer">
+        <div class="dr-head">Комментарии <span style="float:right" onclick="toggleDrawer('comm-drawer')">✕</span></div>
+        <div class="dr-content" id="comm-list"></div>
+        
+        <div id="sticker-picker"></div>
+
+        <div class="input-box">
+            <div class="media-icons">
+                <i class="fas fa-camera" onclick="document.getElementById('pick-photo').click()"></i>
+                <i class="fas fa-grin-alt" onclick="toggleStickers()"></i>
+                <i class="fas fa-microphone" id="mic-btn" onclick="toggleRecording()"></i>
+            </div>
+            <input type="text" id="c-input" placeholder="Напиши..." style="margin:0" onkeydown="if(event.key==='Enter') sendTextComm()">
+            <i class="fas fa-paper-plane" style="color:var(--fire)" onclick="sendTextComm()"></i>
         </div>
-        <div id="search-grid" class="v-grid"></div>
     </div>
 
     <!-- ПРОФИЛЬ -->
-    <div id="profile-page" class="page">
-        <div class="p-info">
+    <div class="page" id="profile-page">
+        <div class="p-head">
             <div class="p-ava" id="p-ava"></div>
-            <h2 id="p-display-name">User</h2>
-            <p id="p-display-user" style="color:gray">@user</p>
+            <h2 id="p-name">Name</h2>
+            <p id="p-user" style="color:gray">@user</p>
             <div class="p-stats">
-                <div><b id="stat-subs">1.2M</b>Подписчики</div>
+                <div><b id="stat-subs">0</b>Друзья</div>
                 <div><b id="stat-likes">0</b>Лайки</div>
                 <div><b id="stat-vids">0</b>Видео</div>
             </div>
-            <button class="btn-fire" style="padding:8px 20px" onclick="location.reload()">Выйти</button>
+            <button class="btn-fire" style="width:150px; padding:10px" onclick="document.getElementById('pick-sticker').click()">+ Свой стикер</button>
         </div>
-        <div id="my-grid" class="v-grid"></div>
+        <div id="p-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px"></div>
     </div>
 
-    <!-- ЗАГРУЗКА -->
-    <div id="upload-drawer" class="drawer">
-        <div class="dr-head">Публикация Огонька 🔥 <span style="float:right" onclick="toggleDrawer('upload-drawer', false)">✕</span></div>
-        <div id="upload-page">
-            <div class="up-preview" id="up-preview">
-                <p style="color:gray">Видео не выбрано</p>
-            </div>
-            <textarea id="up-desc" placeholder="Добавь описание и #хештеги..."></textarea>
-            <button class="btn-fire" style="width:100%" onclick="saveVideo()">Опубликовать</button>
-        </div>
-    </div>
-
-    <!-- КОММЕНТАРИИ -->
-    <div id="comm-drawer" class="drawer">
-        <div class="dr-head">Комментарии <span style="float:right" onclick="toggleDrawer('comm-drawer', false)">✕</span></div>
-        <div class="dr-list" id="comm-list"></div>
-        <div class="input-bar">
-            <i class="fas fa-microphone" style="color:var(--fire)" onclick="addMediaComment('voice')"></i>
-            <i class="fas fa-camera" style="color:cyan" onclick="addMediaComment('photo')"></i>
-            <input type="text" id="c-input" placeholder="Написать...">
-            <i class="fas fa-paper-plane" onclick="addTextComment()"></i>
-        </div>
-    </div>
+    <!-- СКРЫТЫЕ ИНПУТЫ -->
+    <input type="file" id="pick-v" accept="video/*" style="display:none" onchange="uploadVideo(this)">
+    <input type="file" id="pick-photo" accept="image/*" style="display:none" onchange="sendPhoto(this)">
+    <input type="file" id="pick-sticker" accept="image/*" style="display:none" onchange="uploadSticker(this)">
 
     <!-- НАВИГАЦИЯ -->
     <div class="nav">
         <i class="fas fa-home active" onclick="showPage('feed')"></i>
-        <i class="fas fa-search" onclick="showPage('search')"></i>
-        <i class="fas fa-plus-square add-btn" onclick="triggerUpload()"></i>
-        <i class="fas fa-heart" onclick="alert('Все друзья лайкнули вас!')"></i>
+        <i class="fas fa-search"></i>
+        <i class="fas fa-plus-square add-btn" onclick="document.getElementById('pick-v').click()"></i>
+        <i class="fas fa-user-friends" onclick="alert('Вы в сети!')"></i>
         <i class="fas fa-user" onclick="showPage('profile')"></i>
     </div>
 
-    <input type="file" id="file-input" accept="video/*" class="hidden" onchange="previewFile(this)">
-
     <script>
-        // --- DATABASE ---
+        // --- DATABASE (IndexedDB для больших файлов) ---
         let db;
-        const request = indexedDB.open("FireTokDB", 2);
-        request.onupgradeneeded = e => {
+        const req = indexedDB.open("FireTokPlus", 3);
+        req.onupgradeneeded = e => {
             db = e.target.result;
-            if(!db.objectStoreNames.contains("videos")) {
-                db.createObjectStore("videos", { keyPath: "id", autoIncrement: true });
-            }
+            if(!db.objectStoreNames.contains("vids")) db.createObjectStore("vids", {keyPath: "id", autoIncrement: true});
+            if(!db.objectStoreNames.contains("stickers")) db.createObjectStore("stickers", {keyPath: "id", autoIncrement: true});
         };
-        request.onsuccess = e => { db = e.target.result; initApp(); };
+        req.onsuccess = e => { db = e.target.result; init(); };
 
-        let user = JSON.parse(localStorage.getItem('ft_user')) || null;
-        let activeVideoId = null;
-        let tempVideoFile = null;
-
-        function registerUser() {
-            const name = document.getElementById('reg-name').value;
-            const handle = document.getElementById('reg-user').value;
-            if(!name || !handle) return alert("Заполни данные!");
-            user = { name, handle: handle.startsWith('@')?handle:'@'+handle, likes: 0 };
-            localStorage.setItem('ft_user', JSON.stringify(user));
+        let user = JSON.parse(localStorage.getItem('ft_u')) || null;
+        let friends = JSON.parse(localStorage.getItem('ft_f')) || [];
+        let myLikes = JSON.parse(localStorage.getItem('ft_l')) || {};
+        
+        function register() {
+            const n = document.getElementById('reg-name').value;
+            const u = document.getElementById('reg-user').value;
+            if(!n || !u) return;
+            user = { name: n, handle: u.startsWith('@')?u:'@'+u };
+            localStorage.setItem('ft_u', JSON.stringify(user));
             location.reload();
         }
 
-        function initApp() {
+        function init() {
             if(!user) return;
-            document.getElementById('auth-page').classList.add('hidden');
-            document.getElementById('p-display-name').innerText = user.name;
-            document.getElementById('p-display-user').innerText = user.handle;
-            document.getElementById('p-ava').innerHTML = `<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${user.handle}" style="width:100%">`;
+            document.getElementById('auth-page').style.display = 'none';
+            document.getElementById('p-name').innerText = user.name;
+            document.getElementById('p-user').innerText = user.handle;
+            document.getElementById('p-ava').style.backgroundImage = `url(https://api.dicebear.com/7.x/avataaars/svg?seed=${user.handle})`;
             renderFeed();
+            updateStats();
+            loadStickers();
         }
 
-        // --- NAVIGATION ---
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
-            
-            if(pageId === 'feed') {
-                document.querySelector('.fa-home').classList.add('active');
-            } else {
-                document.getElementById(pageId + '-page').style.display = 'block';
-                document.querySelector('.fa-' + (pageId==='profile'?'user':'search')).classList.add('active');
-                if(pageId === 'profile') updateProfile();
-            }
-        }
-
-        function toggleDrawer(id, show) {
-            const d = document.getElementById(id);
-            if(show) d.classList.add('open');
-            else d.classList.remove('open');
-        }
-
-        // --- VIDEO LOGIC ---
+        // --- FEED ---
         async function renderFeed() {
-            const feed = document.getElementById('feed-page');
+            const feed = document.getElementById('main-feed');
             feed.innerHTML = "";
-            const store = db.transaction("videos", "readonly").objectStore("videos");
-            const all = await new Promise(r => store.getAll().onsuccess = e => r(e.target.result));
+            const tx = db.transaction("vids", "readonly");
+            const all = await new Promise(r => tx.objectStore("vids").getAll().onsuccess = e => r(e.target.result));
 
             if(all.length === 0) {
-                feed.innerHTML = `<div style="text-align:center; padding:100px 20px"><h2>Лента пуста 🔥</h2><p>Будь первым, кто загрузит видео!</p></div>`;
+                feed.innerHTML = "<div style='padding:100px; text-align:center'>Лента пуста 🔥 Загрузи видео!</div>";
+                return;
             }
 
             all.reverse().forEach(v => {
                 const url = URL.createObjectURL(v.file);
-                const item = document.createElement('div');
-                item.className = 'video-player';
-                item.id = "vid-" + v.id;
-                item.innerHTML = `
+                const isLiked = myLikes[v.id];
+                const isFriend = friends.includes(v.author);
+
+                const card = document.createElement('div');
+                card.className = 'v-card';
+                card.innerHTML = `
                     <video src="${url}" loop playsinline onclick="this.paused?this.play():this.pause()"></video>
                     <div class="sidebar">
-                        <div class="side-btn" onclick="likeVideo(${v.id}, this)">
-                            <i class="fas fa-heart ${v.likedByMe?'liked':''}"></i>
-                            <span>${v.likes}</span>
+                        <div class="side-btn" onclick="like(${v.id}, this)">
+                            <i class="fas fa-heart ${isLiked?'liked':''}"></i>
+                            <span>${v.likes + (isLiked?1:0)}</span>
                         </div>
-                        <div class="side-btn" onclick="openComments(${v.id})">
+                        <div class="side-btn" onclick="openComm(${v.id})">
                             <i class="fas fa-comment-dots"></i>
-                            <span>${(v.comments || []).length}</span>
-                        </div>
-                        <div class="side-btn" onclick="alert('Репост сделан!')">
-                            <i class="fas fa-share"></i>
-                            <span>Поделиться</span>
+                            <span>${v.comments.length}</span>
                         </div>
                     </div>
-                    <div class="overlay">
-                        <div class="v-meta">
-                            <h3>${v.author}</h3>
-                            <p>${v.desc}</p>
-                        </div>
+                    <div class="info">
+                        <h3>${v.author} ${!isFriend ? `<button class="follow-btn" onclick="follow('${v.author}', this)">+ Дружить</button>` : ''}</h3>
+                        <p>${v.desc}</p>
                     </div>
                 `;
-                feed.appendChild(item);
+                feed.appendChild(card);
             });
-            setupObserver();
+            handleAutoplay();
         }
 
-        function setupObserver() {
-            const obs = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    const v = entry.target.querySelector('video');
-                    if(entry.isIntersecting) v.play().catch(e=>{});
-                    else v.pause();
-                });
-            }, {threshold: 0.8});
-            document.querySelectorAll('.video-player').forEach(p => obs.observe(p));
-        }
+        // --- КОММЕНТАРИИ (Голос, Фото, Стикеры) ---
+        let activeVidId = null;
 
-        // --- UPLOAD ---
-        function triggerUpload() {
-            document.getElementById('file-input').click();
-        }
-
-        function previewFile(input) {
-            const file = input.files[0];
-            if(!file) return;
-            tempVideoFile = file;
-            const url = URL.createObjectURL(file);
-            document.getElementById('up-preview').innerHTML = `<video src="${url}" muted autoplay loop style="width:100%;height:100%;object-fit:cover"></video>`;
-            toggleDrawer('upload-drawer', true);
-        }
-
-        async function saveVideo() {
-            if(!tempVideoFile) return;
-            const desc = document.getElementById('up-desc').value;
-            const tx = db.transaction("videos", "readwrite");
-            tx.objectStore("videos").add({
-                file: tempVideoFile,
-                author: user.handle,
-                desc: desc || "",
-                likes: 0,
-                comments: [],
-                likedByMe: false
-            });
-            tx.oncomplete = () => {
-                toggleDrawer('upload-drawer', false);
-                renderFeed();
-                showPage('feed');
-                alert("Опубликовано навсегда!");
-            };
-        }
-
-        // --- ACTIONS ---
-        async function likeVideo(id, btn) {
-            const tx = db.transaction("videos", "readwrite");
-            const store = tx.objectStore("videos");
-            const v = await new Promise(r => store.get(id).onsuccess = e => r(e.target.result));
-            
-            v.likedByMe = !v.likedByMe;
-            v.likes += v.likedByMe ? 1 : -1;
-            
-            store.put(v);
-            btn.querySelector('i').classList.toggle('liked');
-            btn.querySelector('span').innerText = v.likes;
-        }
-
-        async function openComments(id) {
-            activeVideoId = id;
-            toggleDrawer('comm-drawer', true);
+        function openComm(id) {
+            activeVidId = id;
+            document.getElementById('comm-drawer').classList.add('active');
             renderComments();
         }
 
         async function renderComments() {
             const list = document.getElementById('comm-list');
             list.innerHTML = "";
-            const store = db.transaction("videos", "readonly").objectStore("videos");
-            const v = await new Promise(r => store.get(activeVideoId).onsuccess = e => r(e.target.result));
+            const store = db.transaction("vids", "readonly").objectStore("vids");
+            const v = await new Promise(r => store.get(activeVidId).onsuccess = e => r(e.target.result));
             
-            if(v.comments) {
-                v.comments.forEach(c => {
-                    list.innerHTML += `<div class="c-item"><span class="c-user">${c.u}</span> ${c.t}</div>`;
-                });
-            }
+            v.comments.forEach(c => {
+                let content = `<div class="c-text">${c.text}</div>`;
+                if(c.type === 'photo') content = `<img src="${c.data}" class="c-img">`;
+                if(c.type === 'voice') content = `<audio src="${c.data}" controls class="c-audio"></audio>`;
+                if(c.type === 'sticker') content = `<img src="${c.data}" style="width:80px">`;
+
+                list.innerHTML += `<div class="c-item"><span class="c-user">${c.user}</span>${content}</div>`;
+            });
         }
 
-        async function addTextComment() {
-            const input = document.getElementById('c-input');
-            if(!input.value) return;
-            await saveComment(input.value);
-            input.value = "";
-        }
-
-        async function addMediaComment(type) {
-            const msg = type === 'voice' ? `<div class="media-msg voice"><i class="fas fa-play"></i> ГС 0:05</div>` : `<div class="media-msg">📸 [Фото]</div>`;
-            await saveComment(msg);
-        }
-
-        async function saveComment(text) {
-            const tx = db.transaction("videos", "readwrite");
-            const store = tx.objectStore("videos");
-            const v = await new Promise(r => store.get(activeVideoId).onsuccess = e => r(e.target.result));
-            v.comments.push({ u: user.handle, t: text });
+        async function saveComm(commObj) {
+            const tx = db.transaction("vids", "readwrite");
+            const store = tx.objectStore("vids");
+            const v = await new Promise(r => store.get(activeVidId).onsuccess = e => r(e.target.result));
+            v.comments.push(commObj);
             store.put(v);
             tx.oncomplete = renderComments;
         }
 
-        // --- SEARCH & PROFILE GRID ---
-        async function updateProfile() {
-            const grid = document.getElementById('my-grid');
+        function sendTextComm() {
+            const i = document.getElementById('c-input');
+            if(!i.value) return;
+            saveComm({ user: user.handle, text: i.value, type: 'text' });
+            i.value = "";
+        }
+
+        function sendPhoto(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = e => saveComm({ user: user.handle, data: e.target.result, type: 'photo' });
+            reader.readAsDataURL(file);
+        }
+
+        // --- ГОЛОСОВЫЕ ---
+        let recorder, chunks = [];
+        async function toggleRecording() {
+            const btn = document.getElementById('mic-btn');
+            if(!recorder || recorder.state === 'inactive') {
+                const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+                recorder = new MediaRecorder(stream);
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, {type: 'audio/ogg'});
+                    const reader = new FileReader();
+                    reader.onload = e => saveComm({ user: user.handle, data: e.target.result, type: 'voice' });
+                    reader.readAsDataURL(blob);
+                    chunks = [];
+                };
+                recorder.start();
+                btn.style.color = "red";
+                btn.classList.add('fa-stop-circle');
+            } else {
+                recorder.stop();
+                btn.style.color = "var(--fire)";
+                btn.classList.remove('fa-stop-circle');
+            }
+        }
+
+        // --- СТИКЕРЫ ---
+        function uploadSticker(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                const tx = db.transaction("stickers", "readwrite");
+                tx.objectStore("stickers").add({ data: e.target.result });
+                tx.oncomplete = loadStickers;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function loadStickers() {
+            const picker = document.getElementById('sticker-picker');
+            picker.innerHTML = "";
+            const all = await new Promise(r => db.transaction("stickers").objectStore("stickers").getAll().onsuccess = e => r(e.target.result));
+            all.forEach(s => {
+                const img = document.createElement('img');
+                img.src = s.data;
+                img.className = "s-item";
+                img.onclick = () => {
+                    saveComm({ user: user.handle, data: s.data, type: 'sticker' });
+                    toggleStickers();
+                };
+                picker.appendChild(img);
+            });
+        }
+
+        function toggleStickers() {
+            const p = document.getElementById('sticker-picker');
+            p.style.display = p.style.display === 'grid' ? 'none' : 'grid';
+        }
+
+        // --- ДРУЗЬЯ И ЛАЙКИ ---
+        function follow(handle, btn) {
+            if(!friends.includes(handle)) {
+                friends.push(handle);
+                localStorage.setItem('ft_f', JSON.stringify(friends));
+                btn.innerText = "✓ Друг";
+                btn.style.background = "#333";
+                updateStats();
+            }
+        }
+
+        function like(id, btn) {
+            if(myLikes[id]) delete myLikes[id];
+            else myLikes[id] = true;
+            localStorage.setItem('ft_l', JSON.stringify(myLikes));
+            btn.querySelector('i').classList.toggle('liked');
+            updateStats();
+        }
+
+        // --- СЕРВИС ---
+        function uploadVideo(input) {
+            const file = input.files[0];
+            const desc = prompt("Описание:");
+            const tx = db.transaction("vids", "readwrite");
+            tx.objectStore("vids").add({
+                file: file,
+                author: user.handle,
+                desc: desc || "",
+                likes: Math.floor(Math.random() * 10),
+                comments: []
+            });
+            tx.oncomplete = () => location.reload();
+        }
+
+        function handleAutoplay() {
+            document.querySelectorAll('video').forEach(v => {
+                const r = v.getBoundingClientRect();
+                if(r.top >= 0 && r.top < window.innerHeight / 2) v.play().catch(e=>{});
+                else v.pause();
+            });
+        }
+
+        function showPage(p) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
+            if(p === 'feed') {
+                document.querySelector('.fa-home').classList.add('active');
+            } else {
+                document.getElementById(p + '-page').style.display = 'block';
+                document.querySelector(`.fa-${p==='profile'?'user':'search'}`).classList.add('active');
+                if(p === 'profile') renderMyGrid();
+            }
+        }
+
+        function toggleDrawer(id) { document.getElementById(id).classList.toggle('active'); }
+
+        function updateStats() {
+            document.getElementById('stat-subs').innerText = friends.length;
+            let likes = 0;
+            Object.keys(myLikes).forEach(k => likes++);
+            document.getElementById('stat-likes').innerText = likes;
+        }
+
+        async function renderMyGrid() {
+            const grid = document.getElementById('p-grid');
             grid.innerHTML = "";
-            const store = db.transaction("videos", "readonly").objectStore("videos");
-            const all = await new Promise(r => store.getAll().onsuccess = e => r(e.target.result));
+            const all = await new Promise(r => db.transaction("vids").objectStore("vids").getAll().onsuccess = e => r(e.target.result));
             const my = all.filter(v => v.author === user.handle);
-            
             document.getElementById('stat-vids').innerText = my.length;
-            let totalL = 0;
             my.forEach(v => {
-                totalL += v.likes;
-                const url = URL.createObjectURL(v.file);
-                grid.innerHTML += `<div class="thumb" onclick="goToVideo(${v.id})"><video src="${url}"></video></div>`;
+                const u = URL.createObjectURL(v.file);
+                grid.innerHTML += `<div style="height:150px; background:#111"><video src="${u}" style="width:100%;height:100%;object-fit:cover"></video></div>`;
             });
-            document.getElementById('stat-likes').innerText = totalL;
-        }
-
-        async function searchVideos() {
-            const q = document.getElementById('search-input').value.toLowerCase();
-            const grid = document.getElementById('search-grid');
-            grid.innerHTML = "";
-            if(!q) return;
-            
-            const store = db.transaction("videos", "readonly").objectStore("videos");
-            const all = await new Promise(r => store.getAll().onsuccess = e => r(e.target.result));
-            const found = all.filter(v => v.desc.toLowerCase().includes(q) || v.author.toLowerCase().includes(q));
-            
-            found.forEach(v => {
-                const url = URL.createObjectURL(v.file);
-                grid.innerHTML += `<div class="thumb" onclick="goToVideo(${v.id})"><video src="${url}"></video></div>`;
-            });
-        }
-
-        function goToVideo(id) {
-            showPage('feed');
-            const target = document.getElementById('vid-' + id);
-            if(target) target.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
