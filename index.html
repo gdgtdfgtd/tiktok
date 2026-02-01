@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DarkTok | Disclaimer & Security</title>
+    <title>DarkTok | Private Edition</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,145 +11,156 @@
             --accent: #ff003c;
             --bg: #000000;
             --surface: #121212;
-            --nav-bg: rgba(10, 10, 10, 0.95);
             --text: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        
         body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; width: 100vw; }
 
         /* --- ДИСКЛЕЙМЕР --- */
         #disclaimer-overlay {
             position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; align-items: center; justify-content: center; padding: 20px;
+            display: flex; align-items: center; justify-content: center; padding: 25px;
         }
-        .disclaimer-card {
-            background: var(--surface); padding: 30px; border-radius: 20px;
-            max-width: 500px; border: 1px solid #333; text-align: left;
+        .dis-card {
+            background: var(--surface); padding: 30px; border-radius: 25px;
+            max-width: 450px; border: 1px solid #333; text-align: center;
         }
-        .disclaimer-card h2 { color: var(--accent); margin-bottom: 15px; }
-        .disclaimer-card p { font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 20px; }
+        .dis-card h2 { color: var(--accent); margin-bottom: 15px; text-transform: uppercase; }
+        .dis-card p { font-size: 15px; line-height: 1.6; color: #bbb; margin-bottom: 25px; text-align: left; }
         
-        /* --- ЛЕНТА --- */
-        .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; background: #000; }
+        /* --- FEED --- */
+        .feed { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
         .feed::-webkit-scrollbar { display: none; }
-        .video-item { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; }
+        .v-item { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
         video { width: 100%; height: 100%; object-fit: contain; background: #000; }
 
-        /* --- ИНТЕРФЕЙС --- */
-        .overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 40%); pointer-events: none; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 15px 110px; }
-        .overlay > * { pointer-events: auto; }
-        .sidebar { position: absolute; right: 12px; bottom: 150px; display: flex; flex-direction: column; gap: 25px; align-items: center; }
-        .btn-side { text-align: center; cursor: pointer; color: #fff; }
-        .btn-side i { font-size: 32px; filter: drop-shadow(0 0 10px #000); }
-        .v-code { background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; margin-bottom: 8px; }
+        /* --- UI --- */
+        .sidebar { position: absolute; right: 12px; bottom: 150px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 100; }
+        .btn-side { text-align: center; cursor: pointer; color: #fff; text-shadow: 0 0 10px #000; }
+        .btn-side i { font-size: 35px; }
+        .is-liked { color: var(--accent) !important; }
+        .v-code { background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; margin-bottom: 10px; display: inline-block; }
 
-        /* --- НАВИГАЦИЯ --- */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--nav-bg); backdrop-filter: blur(10px); border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
-        .nav i { font-size: 24px; color: #444; cursor: pointer; }
+        /* --- DRAWERS --- */
+        .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%; background: var(--surface); z-index: 6000; border-radius: 25px 25px 0 0; border-top: 1px solid #333; transition: 0.4s cubic-bezier(0, 1, 0.5, 1); display: flex; flex-direction: column; }
+        .drawer.active { bottom: 0; }
+        .head { padding: 20px; border-bottom: 1px solid #222; text-align: center; font-weight: bold; }
+        .comm-list { flex: 1; overflow-y: auto; padding: 15px; }
+        .comm-item { margin-bottom: 15px; }
+        .comm-user { font-weight: bold; color: var(--accent); font-size: 12px; }
+        .comm-img { max-width: 150px; border-radius: 10px; margin-top: 5px; border: 1px solid #333; }
+        
+        /* --- NAV --- */
+        .nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: rgba(0,0,0,0.9); border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 5000; }
+        .nav i { font-size: 24px; color: #444; }
         .nav i.active { color: #fff; }
-        .nav-plus { font-size: 35px !important; color: var(--accent) !important; }
 
-        /* --- ПАНЕЛИ --- */
+        /* --- UTILS --- */
+        .btn-fire { background: var(--accent); color: #fff; border: none; padding: 16px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; }
+        .btn-fire:disabled { background: #222; color: #555; cursor: not-allowed; }
         .panel { position: fixed; inset: 0; background: var(--bg); z-index: 4000; display: none; flex-direction: column; padding-bottom: 70px; }
-        .header { padding: 20px; text-align: center; border-bottom: 1px solid #222; font-weight: bold; }
-
-        /* Сетка и Удаление */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
         .grid-item { height: 160px; background: #111; position: relative; overflow: hidden; }
         .grid-item video { width: 100%; height: 100%; object-fit: cover; }
-        .del-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: var(--accent); border: none; padding: 5px; border-radius: 5px; cursor: pointer; z-index: 10; }
-
-        .btn-action { background: var(--accent); color: #fff; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; }
-        .btn-action:disabled { background: #333; cursor: not-allowed; }
-
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 20px; z-index: 9999; display: none; font-weight: bold; }
+        .del-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: var(--accent); border: none; padding: 5px; border-radius: 5px; z-index: 10; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 20px; z-index: 9999; display: none; }
     </style>
 </head>
 <body>
 
-    <!-- ДИСКЛЕЙМЕР ПРИ ВХОДЕ -->
+    <!-- ДИСКЛЕЙМЕР -->
     <div id="disclaimer-overlay">
-        <div class="disclaimer-card">
-            <h2>Отказ от ответственности</h2>
-            <p id="disclaimer-text">
-                Внимание! Данное приложение является платформой для свободного обмена контентом. 
-                Как разработчик, я не несу ответственности за материалы, публикуемые пользователями. 
-                Вы подтверждаете, что осознаете риск встретить оскорбительный контент, и берете на себя полную ответственность за свои публикации и действия внутри сети. 
-                Пожалуйста, прослушайте это сообщение полностью, чтобы подтвердить согласие.
+        <div class="dis-card" id="dis-step-1">
+            <h2>Внимание!</h2>
+            <p id="legal-text">
+                Добро пожаловать в DarkTok. Настоящим уведомляем вас, что данная платформа создана для свободного обмена контентом. 
+                Я, как разработчик, не несу никакой ответственности за видеоматериалы, комментарии и изображения, публикуемые пользователями. 
+                Входя в приложение, вы подтверждаете, что можете встретить контент, который покажется вам оскорбительным или неприемлемым. 
+                Вся полнота юридической и моральной ответственности за ваши действия и публикации лежит исключительно на вас.
             </p>
-            
-            <div id="disclaimer-form" style="display: none;">
-                <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 20px; cursor: pointer;">
-                    <input type="checkbox" id="agree-checkbox" onchange="toggleEnterBtn()"> Я принимаю все условия и беру на себя ответственность.
+            <button class="btn-fire" id="btn-start-voice" onclick="initVoice()">Прослушать правила</button>
+            <div id="dis-controls" style="display:none; margin-top:20px;">
+                <label style="display:flex; align-items:center; gap:10px; font-size:12px; margin-bottom:15px; cursor:pointer">
+                    <input type="checkbox" id="check-agree" onchange="checkForm()"> Я полностью принимаю данные условия.
                 </label>
-                <button class="btn-action" id="enter-btn" disabled onclick="acceptDisclaimer()">Принять и войти</button>
+                <button class="btn-fire" id="btn-enter" disabled onclick="finalAccept()">Войти в DarkTok</button>
             </div>
-            
-            <button class="btn-action" id="voice-start-btn" onclick="startVoice()">Начать прослушивание</button>
         </div>
     </div>
 
-    <div class="toast" id="toast">Действие выполнено!</div>
+    <div class="toast" id="toast">Готово!</div>
 
     <!-- ЛЕНТА -->
     <div class="feed" id="main-feed"></div>
 
     <!-- ПОИСК -->
     <div id="panel-search" class="panel">
-        <div class="header">ПОИСК ПО КОДУ ИЛИ ССЫЛКЕ</div>
-        <div style="padding: 15px;">
-            <input type="text" id="search-input" style="width:100%; padding:15px; background:#111; border:1px solid #222; border-radius:10px; color:#fff;" placeholder="Введи DT-CODE или .mp4 ссылку" oninput="runSearch(this.value)">
+        <div class="head">ПОИСК И ССЫЛКИ</div>
+        <div style="padding:15px">
+            <input type="text" id="search-input" style="width:100%; padding:15px; background:#111; border:1px solid #333; border-radius:10px; color:#fff;" placeholder="Код DT-XXXX или .mp4 ссылка" oninput="runSearch(this.value)">
         </div>
         <div class="grid" id="search-results"></div>
     </div>
 
     <!-- ПРОФИЛЬ -->
     <div id="panel-profile" class="panel">
-        <div class="header" id="user-nick">аноним_0000</div>
-        <div style="padding: 30px; text-align: center; display: flex; justify-content: space-around;">
-            <div><b id="p-likes" style="font-size:20px">0</b><br><small style="color:gray">Лайки</small></div>
-            <div><b id="p-vids" style="font-size:20px">0</b><br><small style="color:gray">Видео</small></div>
+        <div class="head" id="user-nick">аноним_0000</div>
+        <div style="padding:20px; text-align:center; display:flex; justify-content:space-around">
+            <div><b id="st-likes">0</b><br><small>Лайки</small></div>
+            <div><b id="st-vids">0</b><br><small>Видео</small></div>
         </div>
         <div class="grid" id="profile-grid"></div>
     </div>
 
     <!-- ПУБЛИКАЦИЯ -->
-    <div id="panel-publish" class="panel" style="padding: 20px;">
-        <div class="header">ПУБЛИКАЦИЯ</div>
-        <div style="width: 100%; height: 250px; background: #0a0a0a; border-radius: 15px; margin: 20px 0; border: 2px dashed #333; display: flex; align-items: center; justify-content: center; overflow: hidden;" id="up-preview" onclick="document.getElementById('file-input').click()">
-            <span style="color:#444">Выбрать видео</span>
+    <div id="panel-publish" class="panel" style="padding:20px">
+        <div class="head">ПУБЛИКАЦИЯ</div>
+        <div id="up-preview" style="width:100%; height:250px; background:#0a0a0a; border-radius:15px; margin:20px 0; border:2px dashed #333; display:flex; align-items:center; justify-content:center; overflow:hidden" onclick="document.getElementById('file-vid').click()">
+            <span id="up-msg">Выбрать видео</span>
         </div>
-        <input type="file" id="file-input" accept="video/*" hidden onchange="previewUpload(this)">
-        <input type="text" id="up-desc" style="width:100%; padding:15px; background:#111; border:1px solid #222; border-radius:10px; color:#fff;" placeholder="Описание...">
-        <button class="btn-action" style="margin-top:20px" onclick="finalizeUpload()">ОПУБЛИКОВАТЬ</button>
-        <button class="btn-action" style="background:#222; margin-top:10px" onclick="nav('home')">ОТМЕНА</button>
+        <input type="file" id="file-vid" accept="video/*" hidden onchange="previewUpload(this)">
+        <input type="text" id="up-desc" style="width:100%; padding:15px; background:#111; border:1px solid #333; border-radius:10px; color:#fff" placeholder="Описание видео...">
+        <button class="btn-fire" style="margin-top:20px" onclick="finalizeUpload()">ОПУБЛИКОВАТЬ</button>
+        <button class="btn-fire" style="background:#222; margin-top:10px" onclick="nav('home')">ОТМЕНА</button>
     </div>
+
+    <!-- КОММЕНТАРИИ -->
+    <div id="comm-drawer" class="drawer">
+        <div class="head">Комментарии</div>
+        <div class="comm-list" id="comm-list"></div>
+        <div style="padding:15px; background:#080808; display:flex; gap:10px; align-items:center">
+            <i class="fas fa-camera" style="color:var(--accent); cursor:pointer" onclick="document.getElementById('file-img').click()"></i>
+            <input type="text" id="comm-input" style="flex:1; padding:12px; background:#1a1a1a; border:none; border-radius:10px; color:#fff; outline:none" placeholder="Написать..." onkeydown="if(event.key==='Enter') sendText()">
+            <i class="fas fa-paper-plane" style="color:var(--accent)" onclick="sendText()"></i>
+        </div>
+    </div>
+    <input type="file" id="file-img" accept="image/*" hidden onchange="sendPhoto(this)">
 
     <!-- НАВБАР -->
     <div class="nav">
         <i class="fas fa-home active" onclick="nav('home')"></i>
         <i class="fas fa-search" onclick="nav('search')"></i>
-        <i class="fas fa-plus-square nav-plus" onclick="nav('publish')"></i>
+        <i class="fas fa-plus-square" style="font-size:35px; color:var(--accent)" onclick="nav('publish')"></i>
         <i class="fas fa-user" onclick="nav('profile')"></i>
     </div>
 
     <script>
         /**
-         * DARKTOK ENGINE: DISCLAIMER & VOICE
+         * DARKTOK ENGINE PRO
          */
 
         let db;
-        let myNick = localStorage.getItem('dt_user_v6') || 'аноним_' + Math.floor(Math.random()*9999);
-        localStorage.setItem('dt_user_v6', myNick);
+        let myNick = localStorage.getItem('dt_n_v7') || 'аноним_' + Math.floor(Math.random()*9999);
+        localStorage.setItem('dt_n_v7', myNick);
 
-        // Проверка дисклеймера
-        if(localStorage.getItem('dt_accepted') === 'true') {
+        // Имитация IP/Device ID (Запоминание входа)
+        const deviceID = localStorage.getItem('dt_device_token');
+        if(deviceID) {
             document.getElementById('disclaimer-overlay').style.display = 'none';
         }
 
-        const request = indexedDB.open("DarkTokDB_V6", 1);
+        const request = indexedDB.open("DarkTokDB_V7", 1);
         request.onupgradeneeded = e => {
             db = e.target.result;
             db.createObjectStore("posts", { keyPath: "id", autoIncrement: true });
@@ -162,46 +173,34 @@
             updateStats();
         }
 
-        // --- ДИСКЛЕЙМЕР И ГОЛОС ---
-        function startVoice() {
-            const btn = document.getElementById('voice-start-btn');
-            btn.style.display = 'none';
+        // --- ГОЛОСОВОЙ ДВИЖОК ---
+        function initVoice() {
+            document.getElementById('btn-start-voice').style.display = 'none';
+            const text = document.getElementById('legal-text').innerText;
+            const synth = window.speechSynthesis;
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'ru-RU';
+            utter.rate = 1.0;
             
-            const text = document.getElementById('disclaimer-text').innerText;
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'ru-RU';
-            speech.rate = 0.9;
-            
-            speech.onend = () => {
-                document.getElementById('disclaimer-form').style.display = 'block';
+            utter.onend = () => {
+                document.getElementById('dis-controls').style.display = 'block';
             };
             
-            window.speechSynthesis.speak(speech);
+            synth.speak(utter);
         }
 
-        function toggleEnterBtn() {
-            const checkbox = document.getElementById('agree-checkbox');
-            document.getElementById('enter-btn').disabled = !checkbox.checked;
+        function checkForm() {
+            const isChecked = document.getElementById('check-agree').checked;
+            document.getElementById('btn-enter').disabled = !isChecked;
         }
 
-        function acceptDisclaimer() {
-            localStorage.setItem('dt_accepted', 'true');
+        function finalAccept() {
+            // Создаем "отпечаток" входа
+            localStorage.setItem('dt_device_token', 'uuid-' + Date.now());
             document.getElementById('disclaimer-overlay').style.display = 'none';
         }
 
-        // --- УДАЛЕНИЕ ВИДЕО ---
-        async function deletePost(id) {
-            if(confirm("Вы действительно хотите удалить это видео навсегда?")) {
-                const tx = db.transaction("posts", "readwrite");
-                tx.objectStore("posts").delete(id);
-                tx.oncomplete = () => {
-                    showToast("Удалено");
-                    location.reload();
-                };
-            }
-        }
-
-        // --- ЛЕНТА ---
+        // --- ЛЕНТА И ЛАЙКИ (FIXED) ---
         async function renderFeed() {
             const feed = document.getElementById('main-feed');
             feed.innerHTML = "";
@@ -211,32 +210,129 @@
             all.reverse().forEach(p => {
                 const url = p.isUrl ? p.file : URL.createObjectURL(p.file);
                 const section = document.createElement('div');
-                section.className = 'video-item';
+                section.className = 'v-item';
                 section.id = 'v-' + p.id;
+                const liked = localStorage.getItem('lk_'+p.id);
+
                 section.innerHTML = `
                     <video src="${url}" loop playsinline onclick="this.paused?this.play():this.pause()"></video>
                     <div class="sidebar">
-                        <div class="btn-side" onclick="handleLike(${p.id}, this)">
-                            <i class="fas fa-heart ${checkLiked(p.id)?'active-like':''}"></i>
+                        <div class="btn-side" onclick="toggleLike(${p.id}, this)">
+                            <i class="fas fa-heart ${liked?'is-liked':''}"></i>
                             <span class="l-count">${p.likes || 0}</span>
                         </div>
-                        <div class="btn-side" onclick="copyToClipboard('${p.code}')"><i class="fas fa-share"></i></div>
+                        <div class="btn-side" onclick="openComm(${p.id})">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>${(p.comments || []).length}</span>
+                        </div>
+                        <div class="btn-side" onclick="copyCode('${p.code}')"><i class="fas fa-share"></i></div>
                     </div>
-                    <div class="overlay">
+                    <div style="position:absolute; bottom:90px; left:15px; pointer-events:none">
                         <div class="v-code">${p.code}</div>
-                        <div class="v-info"><h3>${p.author}</h3><p>${p.desc}</p></div>
+                        <h3 style="color:var(--accent)">${p.author}</h3>
+                        <p style="font-size:14px">${p.desc}</p>
                     </div>
                 `;
                 feed.appendChild(section);
             });
-            setupAutoplay();
+            setupObserver();
         }
 
-        // --- ПРОФИЛЬ ---
+        async function toggleLike(id, btn) {
+            const tx = db.transaction("posts", "readwrite");
+            const store = tx.objectStore("posts");
+            const p = await new Promise(r => store.get(id).onsuccess = e => r(e.target.result));
+
+            const icon = btn.querySelector('i');
+            if(icon.classList.contains('is-liked')) {
+                p.likes = Math.max(0, (p.likes || 0) - 1);
+                localStorage.removeItem('lk_'+id);
+                icon.classList.remove('is-liked');
+            } else {
+                p.likes = (p.likes || 0) + 1;
+                localStorage.setItem('lk_'+id, '1');
+                icon.classList.add('is-liked');
+            }
+            store.put(p);
+            btn.querySelector('.l-count').innerText = p.likes;
+            updateStats();
+        }
+
+        // --- УДАЛЕНИЕ ---
+        async function deletePost(id) {
+            if(confirm("Удалить это видео навсегда?")) {
+                const tx = db.transaction("posts", "readwrite");
+                tx.objectStore("posts").delete(id);
+                tx.oncomplete = () => {
+                    showToast("Видео стерто.");
+                    location.reload();
+                };
+            }
+        }
+
+        // --- КОММЕНТЫ ---
+        let activeId = null;
+        function openComm(id) {
+            activeId = id;
+            document.getElementById('comm-drawer').classList.add('active');
+            drawComm();
+        }
+
+        async function drawComm() {
+            const list = document.getElementById('comm-list');
+            list.innerHTML = "";
+            const v = await new Promise(r => db.transaction("posts").objectStore("posts").get(activeId).onsuccess = e => r(e.target.result));
+            if(v.comments) {
+                v.comments.forEach(c => {
+                    let html = `<div class="comm-item"><span class="comm-user">${c.u}</span><div style="font-size:14px">${c.t}</div>`;
+                    if(c.i) html += `<img src="${c.i}" class="comm-img">`;
+                    list.innerHTML += html + `</div>`;
+                });
+            }
+        }
+
+        async function sendText() {
+            const i = document.getElementById('comm-input');
+            if(!i.value) return;
+            await saveToDb({ u: myNick, t: i.value });
+            i.value = "";
+        }
+
+        function sendPhoto(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = async e => await saveToDb({ u: myNick, t: "[Фото]", i: e.target.result });
+            reader.readAsDataURL(file);
+        }
+
+        async function saveToDb(obj) {
+            const tx = db.transaction("posts", "readwrite");
+            const store = tx.objectStore("posts");
+            const v = await new Promise(r => store.get(activeId).onsuccess = e => r(e.target.result));
+            if(!v.comments) v.comments = [];
+            v.comments.push(obj);
+            store.put(v);
+            tx.oncomplete = drawComm;
+        }
+
+        // --- СЕРВИС ---
+        function nav(p) {
+            document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
+            document.getElementById('comm-drawer').classList.remove('active');
+            document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
+            if(p === 'home') {
+                document.querySelector('.fa-home').classList.add('active');
+            } else {
+                document.getElementById('panel-'+p).style.display = 'flex';
+                const map = {'search':'search', 'publish':'plus-square', 'profile':'user'};
+                document.querySelector('.fa-'+map[p]).classList.add('active');
+                if(p === 'profile') drawProfile();
+            }
+        }
+
         async function drawProfile() {
             const grid = document.getElementById('profile-grid'); grid.innerHTML = "";
-            const tx = db.transaction("posts", "readonly");
-            const all = await new Promise(r => tx.objectStore("posts").getAll().onsuccess = e => r(e.target.result));
+            const all = await new Promise(r => db.transaction("posts").objectStore("posts").getAll().onsuccess = e => r(e.target.result));
             all.filter(p => p.author === myNick).forEach(p => {
                 const url = p.isUrl ? p.file : URL.createObjectURL(p.file);
                 grid.innerHTML += `
@@ -247,25 +343,13 @@
             });
         }
 
-        // --- СЕРВИСНЫЕ ФУНКЦИИ ---
         async function finalizeUpload() {
-            const tempVid = document.getElementById('file-input').files[0];
-            if(!tempVid) return;
+            const file = document.getElementById('file-vid').files[0];
+            if(!file) return;
             const code = 'DT-' + Math.random().toString(36).substr(2, 4).toUpperCase();
             const tx = db.transaction("posts", "readwrite");
-            tx.objectStore("posts").add({ file: tempVid, author: myNick, desc: document.getElementById('up-desc').value || "", likes:0, isUrl: false, code });
+            tx.objectStore("posts").add({ file, author: myNick, desc: document.getElementById('up-desc').value||"", likes: 0, comments: [], code });
             tx.oncomplete = () => location.reload();
-        }
-
-        function nav(p) {
-            document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.nav i').forEach(i => i.classList.remove('active'));
-            if(p === 'home') document.querySelector('.fa-home').classList.add('active');
-            else {
-                document.getElementById('panel-'+p).style.display = 'flex';
-                document.querySelector(`.fa-${p==='profile'?'user':(p==='search'?'search':'plus-square')}`).classList.add('active');
-                if(p === 'profile') drawProfile();
-            }
         }
 
         function previewUpload(input) {
@@ -273,26 +357,26 @@
             document.getElementById('up-preview').innerHTML = `<video src="${url}" muted autoplay loop style="width:100%"></video>`;
         }
 
-        function showToast(msg) {
-            const t = document.getElementById('toast'); t.innerText = msg;
-            t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2000);
-        }
-
-        function setupAutoplay() {
+        function setupObserver() {
             const obs = new IntersectionObserver(entries => {
                 entries.forEach(e => {
                     const v = e.target.querySelector('video');
                     if(v) { if(e.isIntersecting) v.play().catch(()=>{}); else v.pause(); }
                 });
             }, {threshold: 0.7});
-            document.querySelectorAll('.video-item').forEach(v => obs.observe(v));
+            document.querySelectorAll('.v-item').forEach(v => obs.observe(v));
         }
 
-        function jumpTo(id) { nav('home'); setTimeout(() => { const el = document.getElementById('v-' + id); if(el) el.scrollIntoView({ behavior: 'smooth' }); }, 300); }
-        function copyToClipboard(txt) { navigator.clipboard.writeText(txt); showToast("Код скопирован!"); }
-        function handleLike(id, btn) { /* Логика лайка из прошлой версии */ }
-        function checkLiked(id) { return localStorage.getItem('lk_'+id) === '1'; }
-        async function updateStats() { /* Обновление цифр */ }
+        function copyCode(c) { navigator.clipboard.writeText(c); showToast("Код " + c + " скопирован!"); }
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display='block'; setTimeout(()=>t.style.display='none', 2000); }
+        function jumpTo(id) { nav('home'); setTimeout(()=>{ const el=document.getElementById('v-'+id); if(el) el.scrollIntoView({behavior:'smooth'}); }, 300); }
+        async function updateStats() {
+            const all = await new Promise(r => db.transaction("posts").objectStore("posts").getAll().onsuccess = e => r(e.target.result));
+            const my = all.filter(p => p.author === myNick);
+            document.getElementById('st-vids').innerText = my.length;
+            let l = 0; my.forEach(p => l += (p.likes||0));
+            document.getElementById('st-likes').innerText = l;
+        }
 
     </script>
 </body>
